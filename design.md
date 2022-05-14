@@ -26,6 +26,14 @@
 - either
 - or
 
+## Open Questions
+- how should literals be handled?
+    - with quotes
+    - with keyword
+- does concatenation need a new line or should it also work inline?
+- should greedy vs non-greedy always be explicit or should the DSL have a default like regex does?
+
+
 # Concatenation
 
 - either implicit
