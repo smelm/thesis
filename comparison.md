@@ -1,30 +1,30 @@
 
-| ExRegEx                 |           RegEx |
-|-------------------------|----------------:|
-| none [^1]               |               \ |
-| any                     |               . |
-| many of <exp>           |          <exp>+ |
-|                         |          <exp>* |
-|                         |          <exp>? |
-| many of <exp>           |         <exp>+? |
-|                         |         <exp>*? |
-|                         |         <exp>?? |
-|                         |        <exp>{m} |
-|                         |      <exp>{m,n} |
-| starts with <exp>       |          ^<exp> |
-| line starts with <exp>  |      ^<exp>[^2] |
-|                         |              \A |
-| ends with <exp>         |          <exp>$ |
-| line ends with <exp>    |      <exp>$[^2] |
-|                         |              \Z |
-| any of <exps>           |        [<exps>] |
-| any of <char> to <char> | [<char>-<char>] |
-| any but <exp>           |        [^<exp>] |
-| <exp> or <exp>          |  <exp> \| <exp> |
-|                         |         (<exp>) |
-|                         |  (?\:<exp>)[^3] |
-|                         | (?P=<name>)[^4] |
-|                         |       \<number> |
+| ExRegEx                  |           RegEx |
+|--------------------------|----------------:|
+| - not needed -           |               \ |
+| any                      |               . |
+| many of <exp>            |          <exp>+ |
+| maybe many of <exp>      |          <exp>* |
+| maybe <exp>              |          <exp>? |
+| few of <exp>             |         <exp>+? |
+| maybe few of <exp>       |         <exp>*? |
+|                          |         <exp>?? |
+| m of <exp>               |        <exp>{m} |
+| m to n of <exp>          |      <exp>{m,n} |
+| starts with <exp>        |          ^<exp> |
+| line starts with <exp>   |      ^<exp>[^2] |
+|                          |              \A |
+| ends with <exp>          |          <exp>$ |
+| line ends with <exp>     |      <exp>$[^2] |
+|                          |              \Z |
+| any of <exps>            |        [<exps>] |
+| any of <char> to <char>  | [<char>-<char>] |
+| any but <exp>            |        [^<exp>] |
+| <exp> or <exp>           |  <exp> \| <exp> |
+| - not supported -        |         (<exp>) |
+| - not supported -        |       \<number> |
+| - only used internally - |  (?\:<exp>)[^3] |
+|                          | (?P=<name>)[^4] |
 
 # Flags 
 
