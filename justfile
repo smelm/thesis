@@ -5,22 +5,24 @@ clean:
     -rm -rf build/
     mkdir build
 
-build:
-    #!/usr/bin/env bash
+prepare:
     mkdir -p build
 
-    echo "copy sources"
     cp -r chapters build
     cp thesis.tex build
     cp sources.bib build
+    
 
+build: prepare
+    #!/usr/bin/env bash
     cd build
 
     pdflatex thesis.tex
-    bibtex thesis.tex
-    pdflatex thesis.tex
+    bibtex thesis.aux
     pdflatex thesis.tex
 
-open: build
+    mv thesis.pdf ..
+
+open:
     xdg-open thesis.pdf
 
