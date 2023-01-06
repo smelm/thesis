@@ -1,0 +1,431 @@
+\chapter{Language Specification}
+
+This chapter presents the DSL RexRegex and introduces the \textsc{utgast} (Unit Test Generating Abstract Syntax Tree) framework that is used to verify the correctness of the DSL compiler.
+
+\section{General Structure}
+
+\begin{boxFigure}[title={Stages of Compilation},label=fig:stagesOfCompilation]
+\includegraphics[width=\textwidth,trim=30 50 30 50, clip]{./images/arch.jpg}
+\end{boxFigure}
+
+The domain specific language is made up of two different DSLs -- an internal and an external one -- as discussed in section \ref{sec:dslDesignPrinciples}. Both are represented internally by the same abstract syntax tree (AST). The internal DSL consists of nested function calls that assemble the AST while the external DSL consists of an input string that is parsed and mapped onto the internal DSL. This is not only convenient for the implementation but also guarantees consistency between them (see \ref{fig:stagesOfCompilation}). For rapid prototyping and type safety the project was implemented in TypeScript with JavaScript regular expressions as primary compilation target.\footnote{The source code can be found at: \url{https://github.com/smelm/RexRegex}} 
+
+The abstract syntax tree consists of recursive nodes that represent a subset of regex constructs. Each AST node has a type like \code{Sequence}, \code{Repeat} or \code{Literal} and may have additional fields like the \code{lower} and \code{upper} bounds of quantifiers. Whenever a node contains other nodes as fields, these are referred to as \code{child} or \code{children}. Table \ref{tab:astFields} provides a detailed list of the AST nodes.
+
+The internal DSL is a simple abstraction layer that provides a more user-friendly API for assembling the AST, while the external DSL is more sophisticated. It is parsed from a string spanning multiple lines and may start with an optional preamble containing general configuration which is then followed by the DSL script.
+
+This script consists of one of more expressions which are either a single line or a block spanning multiple lines. Block expressions start with a node specific header like \code{many of}, followed by the child expressions and are ended by the \code{end} keyword. While it is not required, it is recommended to indent the child expression to increase readability. For short patterns the DSL also provides an one-line alternative for most block constructs.
+
+\begin{newBoxTable}[title={Fields of AST Nodes},label=tab:astFields]{l|l}
+    AST Node &  Fields \\ \mytoprule
+    Character &  \keyword{value: char} \\ \hline
+    Any & \keyword{-} \\ \hline
+    CharacterRange & \keyword{lower: char, upper: char} \\ \hline
+    CharacterClass & \keyword{ranges: CharacterRange[]} \\ \hline
+    Sequence & \keyword{children: Expression[]} \\  \hline
+    Alternative & \keyword{children: Expression[]} \\ \hline
+    Repeat &  \keyword{child: Expression, lower, upper: int, lazy: bool} \\ \hline
+    Group &  \keyword{child: Expression, name: string}\\ \hline
+    Backreference & \keyword{name: string} \\ \hline
+\end{newBoxTable}
+
+
+\begin{newBoxTable}[title={API Use of Internal DSL},width=15cm]{l|l}
+    Internal DSL                             & Regex          \\ \mytoprule
+    \keyword{character("c")}  & \keyword{c} \\ \hline
+    \keyword{literal("hello")}  & \keyword{hello} \\ \hline
+    \keyword{any()}  & \keyword{.} \\ \hline
+    \keyword{letter("EN")}  & \keyword{[a-zA-Z]} \\ \hline
+    \keyword{letter("DE")}  & \keyword{[a-zA-ZäÄöÖüÜ]} \\ \hline
+    \keyword{digit()}  & \keyword{\bs d} \\ \hline
+    \keyword{alternative(exp, exp, exp)}  & \keyword{(:?exp|exp|exp)} \\ \hline
+    \keyword{sequence(a, b, c)}  & \keyword{(:?abc)} \\ \hline
+    \keyword{repeat(exp, L)}  & \keyword{exp\{L\} } \\ \hline
+    \keyword{repeat(exp, L, U)}  & \keyword{exp\{L,U\} } \\ \hline
+    \keyword{repeat(exp, L, MANY)}  & \keyword{exp\{L,\} } \\ \hline
+    \keyword{maybe(exp)}  & \keyword{exp?} \\ \hline
+    \keyword{maybe(exp, lazy=true)}  & \keyword{exp??} \\ \hline
+    \keyword{manyOf(exp)}  & \keyword{exp+} \\ \hline
+    \keyword{manyOf(exp, lazy=true)}  & \keyword{exp+?} \\ \hline
+    \keyword{group("name", exp)}  & \keyword{(?<name>exp)} \\ \hline
+    \keyword{backreference("name")}  & \keyword{\bs k<name>} \\ \hline
+    \keyword{anyOf("a", ["x","z"])}  & \keyword{[ax-z]} \\ \hline
+    \keyword{anyOf(["a","z"]).exceptOf("b",["e","g"])}  & \keyword{[ac-dh-z]}  \\ \hline
+    \keyword{anyExcept("a", ["x","z"])}  & \keyword{[\caret ax-z]}   \\
+\end{newBoxTable} 
+
+\section{Matching Characters}
+
+\subsection{Literal Characters}
+
+The easiest way to deal with literal characters is to allow letters to represent themselves which is the method languages like regex and \LaTeX{} employ. While this makes matching single characters easier, it inevitably leads to the escaping nightmare and \emph{leaning toothpick syndrome}\cite{LeaningToothpick}. 
+
+RexRegex only treats expressions as literals if they are surrounded with double quotes. This is the common convention in programming languages to mark string literals and also intuitive for non-programmers. String literals are internally converted into sequences of single characters. Using this rule and the \code{any} keyword introduced in the next section, the DSL snippet \ref{code:dslLiteralChars} matches inputs like \inp{abcany!}.
+
+\vspace{5mm}
+\begin{rexregexBox}[title={Literal characters in External DSL},label=code:dslLiteralChars,width=10cm,center]
+"abc"
+"any"
+any
+\end{rexregexBox}
+
+\subsection{Any character}
+
+The \code{any} keyword can be used to match every possible character and correspond directly with the \pattern{.} pattern. It was chosen over other candidates like \code{anything} because it is short and intuitive.
+
+Compared to the \pattern{.} the \code{any} keyword never matches newlines, no matter the settings. When a dialect does not allow for this, \code{any} will be compiled to \pattern{[\caret\bs n]} instead. If the user wants to match newlines as well the equivalent to \pattern{.|\bs n} must be used which is \code{either any or LINE.NEW}. This decision was made because the target demographic of the external DSL \ref{sec:demoNovice} perceives newlines as something separate from characters and they should be treated as such in the DSL.
+
+\section{Character Classes} \label{sec:dslCharClasses}
+
+\begin{rexregexBox}[label=code:dslCharClasses,title=Character classes,width=10cm,center]
+any of
+    LETTER.EN
+    ".", "?", "!", ","
+except of
+    "x", "y", "z"
+end
+\end{rexregexBox}
+
+Character classes like \pattern{[abc]} are matched via the \code{any of "a", "b", "c"} construct. For consistency's sake RexRegex requires the user to wrap all characters in double quotes. Character ranges like \pattern{[a-z]} can be included using \code{a to z}. It is possible to exclude characters from classes with a \code{except of} clause. The listed members are removed from the character class during parsing. RexRegex also provides predefined classes like \code{NUMBER}, \code{LETTER.EN} and \code{LETTER.DE}. 
+
+\section{Alternatives}
+
+The user can match alternatives like \pattern{ab|abc|\bs d} using the \code{either "ab" or "abc" or DIGIT} construct. To prevent the group from expending to far the output is automatically surrounded by a group \pattern{(:?abc|ab|\bs d)}. The alternatives are sorted by an estimate for their length to prevent the error that is present in the original regex which only matches \inp{\matched{ab}c}.
+
+\section{Quantifiers}
+
+\begin{rexregexBox}[title={Quantifiers in RexRegex},label=code:quantifiersInRexRegex,width=10cm,center]
+3 of ...
+1 to 3 of ...
+0 to many of ...
+many of ...
+maybe ...
+\end{rexregexBox}
+
+\subsection{Ranges} \label{sec:dslQuantifierRanges}
+
+The user can repeat a subexpression by a constant with \code{3 of \expr} which produces \pattern{\placeholder\{3\}}. Ranges can be expressed with \code{1 to 3 of \expr} reusing the \code{to} keyword (see section \ref{sec:dslCharClasses}) for language coherence. Unlimited repetition is not expressed implicitly by omitting the upper bound \pattern{\placeholder\{1,\}} but by explicitly stating to upper bound to be \code{1 to many of \expr}.
+
+\subsection{Kleene Star, Plus and Question Mark}
+
+A expression can be marked as optional -- i.e. repeated zero or one time -- with \code{maybe \expr} which was chosen over \code{optional \expr} because it is the simpler term in English. To read more naturally it was decided to introduce an exception and not write it as \code{maybe of \expr}.
+
+The regex concepts \pattern{\placeholder *} and \pattern{\placeholder +} were challenging to translate into the DSL. Both are associated with natural language concepts such as \inp{many}, \inp{a lot} or \inp{any number of} and it is hard if not impossible to find two terms that are distinguished enough. Because of this, RexRegex only represents \pattern{+} with the \code{many of \expr} pattern and provides no shorthand for \pattern{*} since it is more natural for many to not include zero. It may be still confusing that a single character qualifies as many but the DSL cannot resolve Sorites paradox \cite{SoritesParadox}. To express the \pattern{*} quantifier an explicit range must be used \code{0 to many of \expr}. The \code{many} keyword is reused from the unbounded ranges to keep the amount of keywords small.
+
+\section{Lazy and Possessive Quantifiers}
+
+Lazy quantifiers can be used in the internal DSL as an optional argument \code{repeat(expr, lower, upper, lazy=false)} but are a lot more problematic in the external DSL. They are by their nature a procedural concept and stand in conflict with the declarative design principle (see section \ref{sec:declarativeOverImparative}). This made it hard to find keywords that could express such a concept. Following the Zen of Python (listing \ref{fig:zenOfPython}) \inp{If the implementation is hard to explain, it's a bad idea}, it was deemed a bad idea and not included in the external DSL as a primitive. High level abstractions may still compile to lazy quantifiers but this implementation detail will not be visible for the user.
+
+If lazy quantifiers should at some point be added to the language the \code{few} keyword, was reserved for them. This would allow for constructs like: 
+
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \vspace{-.7em}
+    \item \code{few of \expr}
+    \item \code{3 to few of \expr} 
+    \item \code{few of 3 to 5 of \expr} 
+    \vspace{-.7em}
+\end{itemize}
+
+
+This just leaves the lazy question mark \pattern{??} for which no suitable candidate has been found, since \code{maybe but rather not} or \code{only if necessary} are to clumsy. Other DSLs (see \ref{sec:relatedWork}) like Melody \cite{RegexDslMelody} solve this problem by introducing the \code{lazy} keyword which could function as a last resort but clearly goes against the design principles of RexRegex.
+
+Possessive quantifiers share the same problems as lazy quantifiers but fit even less in a declarative framework. They can only be understood by mentally simulating the regex execution and are not supported by the majority of dialects. For this reasons they were excluded from RexRegex.
+
+\section{Anchors} \label{sec:dslAnchors}
+
+The caret \pattern{\caret} and dollar sign \pattern{\$} are commonly used regex features (see section \ref{sec:analysisRegexUsage}). 
+
+To disambiguate input anchors from line anchors RexRegex introduces the constants \code{LINE.NEW}, \code{LINE.START} and \code{LINE.END} 
+which compile to the newline character class and a line anchor respectively.\footnote{When compiling to dialects that do not have line anchors look-ahead or look-behinds to the newline class are used instead.} 
+
+Since it is common practice to start a pattern overly restrictive and relax the constraints when the need arises \cite{RegexesAreHard}, the default of RexRegex is to match the entire string \pattern{\caret\placeholder\dollar}. To change this the user can set the settings
+
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \vspace{-.7em}
+    \item \code{at beginning of input}
+    \item \code{at end of input}
+    \item \code{somewhere in input}
+    \vspace{-.7em}
+\end{itemize}
+
+in the preamble. This is not only more explicit but also more natural since this makes a statement about the entire pattern and does not introduce the abstract concept of a zero width anchor.
+
+\section{Groups and Backreferences}
+
+\begin{rexregexBox}[label=code:dslGroupsAndBackrefs,title=Groups and Backreferences in RexRegex]
+named quote
+    either SYMBOL.QUOTE.SINGLE or SYMBOL.QUOTE.DOUBLE
+end
+many of LETTER.DE
+same as quote
+\end{rexregexBox}
+
+In regex groups perform many functions. They allow the user to extract or replace parts of the input, refer back to already matched parts and are needed for nested expressions. Because they are more explicit than numbered capture groups, only named groups are supported in RexRegex. Which can be defined using \code{named \emph{<name>} ...end}. This was chosen because in the DSL the main function of the construct is to assign a name to a subexpression rather than grouping it, which is expressed through the block syntax.
+
+The contents of a group can be matched again with \code{same as \emph{<name>}} which corresponds to the backreference \pattern{\bs k\textbf{<}\emph{name}\textbf{>}}. 
+
+\section{Macros and Extensions} \label{sec:macros}
+
+\begin{rexregexBox}[float=htb,label=code:dslMacros,title=Usage of Macros in RexRegex,width=12cm,center]
+define logLevel as
+    either "DEBUG" or "ERROR" or "INFO"
+end
+
+define logLine as
+    timestamp("YYYY-MM-DD HH:m:s")
+    surroundWith(logLevel, "[", "]")
+    ":"
+    many of LETTER(EN)
+    LINE.NEW
+end
+
+many of logline
+\end{rexregexBox}
+
+Since it is part of the host language, the internal DSL has access to variables and functions which provides a lot of convenience to the user. For a better user experience these features were added to the external DSL as well. With \code{define \emph{<namespace>.<name>} as \expr} the user can define a constant that can be used later as \code{<name>}. This is not represented in the AST and only known during parsing. It is also possible to pass predefined variables \code{\{~\emph{<namespace>}:~\{~\emph{<name>}:~\emph{<ast>}~\}~\}} to the parser at startup. Using this mechanism RexRegex provides a small set of constants like \code{LINE.NEW} or \code{DIGIT}. 
+
+When a variable is passed to RexRegex at startup it does not have to be an AST node but can also be a function that returns one. When the parser encounters a expression like \code{namespace.function("\emph{<literal>}", \emph{<variable>})} in a DSL script it invokes the function under that name with the argument list and inserts the returned node into the AST. This not only allows RexRegex to provide a small standard library but also to load third party functions into the DSL. The resulting level of abstraction is not just domain specific to string operations but to the particular subdomain the user is working with, allowing for a large degree of readability (see listing \ref{code:dslMacros}). Future work may even allow the user to add custom parser rules to create extensions that follow the free-form syntax of RexRegex.
+
+\section{Example: The Email Regex}
+
+Listing \ref{code:emailPattern} showcases a full example of the RexRegex DSL. Matching email addresses is a notoriously difficult task and the regex (see listing \ref{code:emailRegex}) that achieves it is challenging to read. While verbose the DSL code is a lot easier to read and understand.
+
+
+\begin{listingBox}[float=htb,title={Regex for Validating Email Addresses},label=code:emailRegex]
+    \lstinputlisting[basicstyle=\small\bfseries\ttfamily,nolol]{./emailRegex.txt}
+\end{listingBox}
+
+\begin{rexregexBox}[title={RexRegex Code for Validating Email Addresses},breakable,label=code:emailPattern,width=13cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily}]
+define ipAddress as
+    begin separatedBy(".")
+        1 to 3 of DIGIT
+    end
+end
+
+define legalChar as
+    any except of
+        "<", ">", "(", ")", "[", "]"
+        "\\", ".", ",", ";", ":", "@"
+        QUOTE.DOUBLE, SPACE
+    end
+end
+
+either
+    begin separatedBy(".", "optional")
+        many of legalChar
+    end
+or
+    begin wrappedIn(QUOTE.DOUBLE)
+        many of any
+    end
+end
+"@"
+either
+    wrapIn("[", "]", ipAddress)
+or
+    many of
+        many of
+            any of LETTER.EN, DIGIT, "-"
+        end
+        "."
+    end
+    2 to many of LETTER.EN
+end
+\end{rexregexBox}
+
+
+\newtcolorbox[blend into=listings]{inferedExample}[1][]{lstBox,#1}
+
+\section{Semantic Verification} \label{sec:verification}
+
+Guaranteeing the correctness of the produced regex is not just a necessity (see section \ref{sec:dslDesignPrinciples}) but also a remarkable challenge. With the explosive number of required test cases, manual testing is not feasible but even automated unit testing may not suffice. For $T$ target languages and $F$ language features and $N$ test cases per feature, the naive approach to testing requires $\mathcal{O}(T \cdot F \cdot N)$ test cases. This is not only work intensive, error-prone and unmaintainable in a real world application. 
+
+The tests cannot test the syntax of the generated regex, they must test the semantics instead. This can be achieved by verifying that the regex output matches a list of positive samples while rejecting a list of negative samples. This makes the test independent of the compilation target. It is still dependent on both the language features and the different test cases, which is a problem. This means that the same properties are tested by similar substrings in different test cases. 
+
+When a test case for the quantifier behavior in \code{many of "a"} is added, it may be forgotten in the test for \code{many of any}. Since the test case tests a quantifier behavior it is needed in both. This represents a form of code duplication \cite[p.~4]{refactoring}. This is caused by the fact that regex and RexRegex are inherently nested while strings are sequential by their nature. This work proposes a conceptually simple solution: the DSL must become its own testing framework.
+
+RexRegex does not only provide a mechanism to transform the AST to regex, but also to generate test positive and negative test samples from it. This leverages the nested nature of the DSL to test the nested semantics of regex. Since it is the AST that produces these unit tests, it is called the Unit Test Generating Abstract Syntax Tree (\textsc{utgast}) framework.
+
+\subsubsection{Generating Positive Samples}
+
+\begin{pseudoCode}[title={Generating Positive Test Samples},breakable=true,label=code:verificationPositive]
+function positiveSamples(node, root):
+  switch node.type:
+    case Character: %\label{code:positivesCharStart}%
+      return { node.value }
+    case Any:
+      return { randomChar() } %\label{code:positivesAnyEnd}%
+    case CharacterClass: %\label{code:positiveCharClassStart}%
+      return ${\displaystyle \hspace{-1.5em}\bigcup_{i}^\text{NUM SAMPLES}}\hspace{-1.5em}$ randomChar(randomChoice(node.ranges)) %\label{code:positiveCharClassEnd}%
+    case Alternative: %\label{code:positiveAltStart}%
+      return ${\displaystyle \hspace{-2em}\bigcup_{\text{c }\in\text{ node.children}}\hspace{-2em}}$ positiveSamples(c) %\label{code:positiveAltEnd}%
+    case Sequence:  %\label{code:positiveSeqStart}%
+      seqOfSamples $\gets$ [ positiveSamples(c) $\mid$ c $\in$ node.children ]
+      maxLen $\gets$ ${\displaystyle \hspace{-2em}\max_{\text{s } \in \text{ seqOfSamples}}}\hspace{-2em}$  length(s)
+      combinations $\gets$ newArray(maxLen, fill="")
+      for i $\gets$ 0 to maxLen:
+        for samples $\in$ seqOfSamples:
+          sample $\gets$ samples[i mod length(samples)]
+          combinations[i] $\gets$ concat(combinations[i], sample)
+      return combinations %\label{code:positiveSeqEnd}%
+    case Quantifier: %\label{code:positiveRepeatStart}%
+      upper $\gets$ if node.upper $\neq$ $\infty$:
+                 node.upper 
+               else: node.lower + randomInt(1, 5) 
+      samples $\gets$ positiveSamples(node.child)
+      return ${\displaystyle \hspace{-1em}\bigcup_{\text{s }\in\text{ samples}}\hspace{-1em}}$ repeat(s, node.lower) $\cup$ repeat(s, upper)  %\label{code:positiveRepeatEnd}%
+    case Group: %\label{code:positiveBackrefStart}%
+        node.positiveSamples $\gets$ positiveSamples(node.child)        
+        return node.positiveSamples
+    case Backreference:
+      group $\gets$ n $\in$ ast : n.type = Group $\land$ n.name = node.name
+      return group.positiveSamples %\label{code:positiveBackrefEnd}%
+\end{pseudoCode}
+
+The generation of positive samples is shown in listing \ref{code:verificationPositive}. To ensure reproduceability random operations are executed with a random seed that is fixed for each test run. The function receives the current AST \code{node} and the root \code{ast} node which is used for context, as parameters.
+
+The only positive sample for a character is that character, while any random character is matched by and therefor a positive sample for the \code{any} construct (see lines \ref{code:positivesCharStart}-\ref{code:positivesAnyEnd}). The helper function \code{randomChar} produces a random character code in a given range which defaults to the unicode range. This could be further improved by generating characters from different unicode ranges like Latin or Cyrillic characters.
+
+Character classes are internally stored as a list of character ranges, which includes trivial ranges like \pattern{[a-a]} to represent single characters. The implementation guarantees that this list is sorted by the lower bound of the range and all overlaps are pruned. Because of this restraints, $N$ positive samples can simply be found by randomly selecting ranges and characters without repetition (see lines \ref{code:positiveCharClassStart}-\ref{code:positiveCharClassEnd}). The birthday paradox could create performance issues by large $N$ and small character classes but it is not expected to be an issue.
+
+Since the alternative construct is just the union of its children, the positive samples can also be generated as such (see lines \ref{code:positiveAltStart}-\ref{code:positiveAltEnd}).
+
+The positive samples matched by a sequence are all combinations of positive samples of its children. The combination could be exhaustivly generated using the Cartesian product but to avoid a explosion of test cases a simpler method is used in which each entry is treated as a ring buffer and all $i$th samples are combined (see lines \ref{code:positiveSeqStart}-\ref{code:positiveSeqEnd}).
+
+The positive samples for any quantifier can be generated by repeating the child samples by the lower and upper bound (see lines \ref{code:positiveRepeatStart}-\ref{code:positiveRepeatEnd}). In cases like \code{many of} when there is no upper bound a random upper bound is chosen. The function \code{repeat(str,n)} concatenates a string $n$ times with itself and returns the empty string when $n$ is zero.
+
+The samples for backreferences require information about the samples generated by the corresponding group. For this reason the produced samples are stored and can be accessed via tree search from the \code{root} node (see lines \ref{code:positiveBackrefStart}-\ref{code:positiveBackrefEnd}).
+
+\subsubsection{Generating Negative Samples}
+
+\begin{pseudoCode}[title={Generating Negative Test Samples},breakable=true,label=code:verificationNegative]
+function negativeSamples(node):
+  switch node.type:
+    case Character: %\label{code:negativeCharStart}%
+      while c = node.value:
+        c $\gets$ randomChar()
+      return c
+    case Any:
+      return $\varnothing$ %\label{code:negativeAnyEnd}%
+    case CharacterClass: %\label{code:negativeClassStart}%
+      invertedRanges $\gets$ []
+      lower $\gets$ $\textsc{encoding.first\_char}$ 
+      for range $\in$ node.ranges:
+        add(invertedRanges, [lower, range.lower - 1])
+        lower $\gets$ range.upper + 1
+      add(invertedRanges, [lower, $\textsc{encoding.last\_char}$])
+      return positiveSamples(invertedRanges) %\label{code:negativeClassEnd}%
+    case Alternative: %\label{code:negativeAltStart}%
+      samples $\gets$ $\varnothing$
+      for alternative $\in$ node.children:
+        candidates $\gets$ negativeSamples(alternative)
+        for candidate $\in$ candidates:
+          if $\nexists$ c $\in$ node.children : matches(c, candidate):
+            samples $\gets$ samples $\cup$ candidate
+      return samples %\label{code:negativeAltEnd}%
+    case Sequence:
+      samples $\gets$ $\varnothing$ 
+      for $i \gets 0$ to length(node.children):
+        prefix, element, suffix $\gets$ splitAt(node.children, i)
+        samples $\gets$ samples $\cup$ combine(
+                              positiveSamples(prefix), 
+                              negativeSamples(element), 
+                              positiveSamples(suffix))
+      return concat(samples)
+    case Quantifier:
+      samples $\gets$ $\varnothing$ 
+      for sample $\in$ positiveSamples(node.child): %\label{code:negativeRepPosStart}%
+        if node.lower $\neq$ 0:
+          samples $\gets$ samples $\cup$ repeat(sample, node.lower - 1) 
+        if node.upper $\neq \infty$:
+          samples $\gets$ samples $\cup$ repeat(sample, node.upper + 1) %\label{code:negativeRepPosEnd}%
+      for sample $\in$ negativeSamples(node.child): %\label{code:negativeRepNegStart}%
+        if node.lower $\neq$ 0:
+          samples $\gets$ samples $\cup$ repeat(sample, node.lower)
+        if node.upper $\neq$ $\infty$:
+          samples $\gets$ samples $\cup$ repeat(sample, node.upper)
+        else:
+          upper $\gets$ randomInt(node.lower, node.lower + 5)
+          samples $\gets$ samples $\cup$ repeat(sample, upper) %\label{code:negativeRepNegEnd}%
+    case Group:
+      return negativeSamples(node.child)
+    case Backreference:  %\label{code:negativeBackrefStart}%
+      group $\gets$ node $\in$ getNodes(root) :
+                        $\land$ node.type = Group 
+                        $\land$ node.name = node.name
+      shiftBy $\gets$ randomInt(1,length(group.positiveSamples))
+      return rotate(group.positiveSamples, shiftBy) %\label{code:negativeBackrefEnd}%
+\end{pseudoCode}
+
+The generation of negative samples is shown in listing \ref{code:verificationNegative} and slightly more involved in a few cases.
+
+The negative sample for a character is any other character, while \code{any} does not have negative samples, since it matches everything (see lines \ref{code:negativeCharStart}-\ref{code:negativeAnyEnd}).
+
+The negative samples for character classes are just the positive samples of the inverted class \pattern{[\caret \emph{<class>}]}. Thanks to the internal representation as lists of non-overlapping ranges, this just requires creating the ranges between the upper and lower bounds and the minimal and maximal values (see lines \ref{code:negativeClassStart}-\ref{code:negativeClassEnd}).
+
+Following De Morgan's law, the negation of alternatives -- which are a union -- is the intersection of all negated child nodes:
+
+\vspace{-1em}
+\begin{equation*}
+    \bigcap_{\text{c } \in \text{ children}} \hspace{-.7em}\overline{c}
+\end{equation*}
+\vspace{-1em}
+
+Since the negation of node can potentially be infinite, this intersection is determined implicitly by using partial compilation. All alternatives are compiled to regex and when they match a sample it is removed (see lines \ref{code:negativeAltStart}-\ref{code:negativeAltEnd}).
+
+A sequence can have a lot of negative samples, since not just one element can cause the sequence to not match and for each number of negative elements there are ${k}\choose{n}$ possibilities. To prevent combinatorial explosion of samples, only cases where one element is negative are considered. This also simplifies the algorithm which only requires to split the \code{children} into a prefix and suffix for which the positive samples are generated. Between them the negative samples of the $i$th element are inserted. If cases where two proverbial wrongs make a right were to be discovered, this approach would need to be supplemented.
+
+The generation for the \code{Repeat} node consists of two parts: positive samples that are repeated by an amount outside of the range (lines \ref{code:negativeRepPosStart}-\ref{code:negativeRepPosEnd}) and negative samples that are repeated within the bounds (lines \ref{code:negativeRepNegStart}-\ref{code:negativeRepNegEnd}).
+Negative samples for backreference can be generated by any derangement (permutation without trivial cycles) of the positive samples of the corresponding group. Since most derangement algorithms are far from trivial, only a random rotation (shift of all list elements) is used.
+
+Together these two algorithms can create a complete test suite from a given set of DSL examples against which can be used to verify any compilation result.
+
+\section{Inferring DSL Code from Examples} \label{sec:inferenceOfRexRegex}
+
+One implicit advantage of the \textsc{utgast} framework is that the user can use it to generate matching and not matching input examples to gain a better understanding for the behavior of the pattern. RexRegex also provides support for the opposite direction.
+
+This is based on the work of Machine Learning Lab who implemented a genetic algorithm to find the best regex based on a multiobjective optimization strategy \cite{bartoli2016inference}\cite{bartoli2016can}\cite{bartoli2015evolutionary}. Their implementation contains an AST structure similar to the one of RexRegex which allowed for a simple integration. This required adding three instances of serialization/deserialization logic: Writing the RegexGenerator results to JSON, reading the RexRegex AST from JSON and writing it back as DSL code.
+Listing \ref{code:inferenceOfRexRegex} shows an example of RexRegex code alongside the input examples from which it was inferred.
+
+\FloatBarrier
+
+\begin{inferedExample}[float=htb,title={Infered RexRegex Code from Examples},label=code:inferenceOfRexRegex]
+    \begin{lstlisting}[basicstyle=\scriptsize,mathescape=true]
+Jan 12 06:26:19: ACCEPT service http from 119.63.193.196 to firewall(pub-nic), 
+    prefix: "none" (in: eth0 119.63.193.196($\matchedSmall{\text{5c:0a:5b:63:4a:82}}$):4399 -> 
+    140.105.63.164($\matchedSmall{\text{50:06:04:92:53:44}}$):80 TCP flags: ****S* len:60 ttl:32)
+Jan 12 06:26:20: ACCEPT service dns from 140.105.48.16 to firewall(pub-nic-dns), 
+    prefix: "none" (in: eth0 140.105.48.16($\matchedSmall{\text{00:21:dd:bc:95:44}}$):4263 -> 
+    140.105.63.158($\matchedSmall{\text{00:14:31:83:c6:8d}}$):53 UDP len:76 ttl:62)
+Jan 12 06:27:09: DROP service 68->67(udp) from 216.34.211.83 to 216.34.253.94, 
+    prefix: "spoof iana-0/8" (in: eth0 213.92.153.78($\matchedSmall{\text{00:1f:d6:19:0a:80}}$):68 -> 
+    69.43.177.110($\matchedSmall{\text{00:30:fe:fd:d6:51}}$):67 UDP len:576 ttl:64)
+    \end{lstlisting}
+    \tcblower
+    \begin{lstlisting}[style=rexregex]
+DIGIT
+1 to many of
+    0 to many of LETTER.EN
+    ":"
+end
+DIGIT
+LETTER.EN
+    \end{lstlisting}
+\end{inferedExample}
+
+It is important to note that the conversion from the generator to RexRegex is not lossless. The generator creates features that may be not supported by the language. The output from the example in listing \ref{code:inferenceOfRexRegex} contained lazy quantifier which have been converted to greedy ones. In this case this does not influence the semantics of the pattern but it may in other cases. This is unavoidable since while the feature is convenient for the user, it is not worth compromising on language principles for it.
+
+Another issue is readability. The authors of the RegexGenerator note: 
+
+\begin{quote}
+An issue that we have not yet addressed is readability of the solutions. [...] Manual inspection of a few solutions suggest that human operators tend to construct shorter solutions, but we could not find any clear cut between the categories: even automatically-constructed solutions may be very compact and highly readable; and, there is ample variability between operators with task difficulty playing a key role. \cite{bartoli2016can}
+\end{quote}
+
+The solutions the RegexGenerator creates are subject to randomness and additionally only use low level regex concepts which are far less readable than the high level abstractions described in \ref{sec:macros}. This results in significantly less readable DSL code. This can be partially mitigated by optimizations on the AST -- like the recognition and replacement of special character classes like \code{LETTER} and \code{DIGIT} -- but with growing number of extensions and library functions this becomes unfeasible. Further work may focus on porting the generating algorithm and using the high level AST elements for the genetic algorithm instead.
+
+A interactive generator like \cite{noxoneRegexGenerator} represents an approach that is more aligned with the principles of RexRegex. This generator tries a database of known patterns agains an input example and allows the user to choose subpatterns in a visual manner. Further work should focus on this approach, since it allows to recognize predefined abstractions in a more consistently.
+
+
+

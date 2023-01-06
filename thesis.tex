@@ -1,125 +1,34 @@
-% This template was initially provided by Dulip Withanage.
-% Modifications 
-% were made by Conny Junghans and Jannik Strötgen
-% and Sascha Hunold
-
-\documentclass[
-     12pt,                    % font size
-     a4paper,             % paper format
-     BCOR10mm,     % binding correction
-     DIV14,                 % stripe size for margin calculation
-     listof=totoc,                    % table listing in toc
-     bibliography=totoc,       % bibliography in toc
-     index=totoc,              % index in toc
+\documentclass[12pt,
+    a4paper, 
+    twoside, 
+    headsepline,
+    BCOR=10mm,% binding correction
+    DIV=14,                 % stripe size for margin calculation
+    listof=totoc, % table listing in toc
+    bibliography=totoc, % bibliography in toc
+    index=totoc, % index in toc
 %     parskip            % paragraph skip instead of paragraph indent
-     twoside,
-     headsepline
      ]{scrreprt}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\include{packages}
+\include{commands}
 
-% PACKAGES:
+\widowpenalty10000
+\clubpenalty10000
 
-% Use German :
-% make sure texlive-lang-german is installed (for TexLive)
-\usepackage[ngerman]{babel}
-% Input encoding
-\usepackage[utf8]{inputenc}
-% Font encoding
-\usepackage[T1]{fontenc}
-% Index-generation
-\usepackage{makeidx}
-% Einbinden von URLs:
-\usepackage{url}
-% Special \LaTex symbols (e.g. \BibTeX):
-\usepackage{doc}
-% Include Graphic-files:
-\usepackage{graphicx}
-
-% Fuer anderthalbzeiligen Textsatz
-\usepackage{setspace}
-
-% hyperrefs in the documents
-\usepackage[bookmarks=true,colorlinks,pdfpagelabels,pdfstartview = FitH,bookmarksopen = true,bookmarksnumbered = true,linkcolor = black,plainpages = false,hypertexnames = false,citecolor = black,urlcolor=black]{hyperref} 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% OTHER SETTINGS:
-
-% Pagestyle:
 \pagestyle{headings}
-
 % Choose language
 \newcommand{\setlang}[1]{\selectlanguage{#1}\nonfrenchspacing}
 
+\bibliography{sources}
 
 \begin{document}
 
-% TITLE:
-\pagenumbering{roman} 
-\begin{titlepage}
-
-
-\vspace*{1cm}
-\begin{center}
-\vspace*{3cm}
-\textbf{ 
-\Large Ruprecht-Karls-Universität Heidelberg\\
-\smallskip
-\Large Institut für Informatik\\
-\smallskip
-\Large Lehrstuhl für Parallele und Verteilte Systeme\\
-\smallskip
-}
-
-\vspace{3cm}
-
-\textbf{\large Bachelorarbeit}
-
-\vspace{0.5\baselineskip}
-{\huge
-    A DSL for Regex
-}
-\end{center}
-
-\vfill 
-
-{\large
-\begin{tabular}[l]{ll}
-Name: & Samuel Melm\\
-Matrikelnummer: & 4068750 \\
-Betreuer: & Prof. Dr. Andrzejak\\
-Datum der Abgabe: & dd.mm.yyyy
-\end{tabular}
-}
-
-\end{titlepage}
-
-\onehalfspacing
-
-\thispagestyle{empty}
-
-\vspace*{100pt}
-\noindent
-Ich versichere, dass ich diese Bachelor-Arbeit selbstständig verfasst und nur die angegebenen
-Quellen und Hilfsmittel verwendet habe.
-
-\vspace*{50pt}
-
-\noindent
-Heidelberg, dd.mm.yyyy
-\cleardoublepage
-
+\include{titlepage}
+\include{versicherung}
 \include{summary}
-\section*{Zusammenfassung}
-
-Dies ist eine Zusammenfassung der Arbeit.
-
-\section*{Abstract}
-
-This is the abstract.
+\include{abstract}
 
 \cleardoublepage
 
@@ -127,23 +36,26 @@ This is the abstract.
 \cleardoublepage
 \pagenumbering{arabic} 
 
-% List of figures (Abbildungsverzeichnis):
 \listoffigures
-% List of tables (Tabellenverzeichnis):
 \listoftables
+
+\renewcommand*{\lstlistlistingname}{List of Listings}
+\lstlistoflistings
+
 \cleardoublepage
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\include{chapters/01_introduction}
-\include{chapters/02_what_are_regex}
-\include{chapters/03_the_problem_with_regex}
-\include{chapters/04_dsl_design}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sloppy
 
 
-\bibliographystyle{plain}
-\bibliography{sources}
+\include{01_introduction}
+\include{02_regex}
+\include{03_motivation}
+\include{04_design}
+\include{05_dsl}
+\include{06_evaluation}
+
+%\bibliographystyle{plain}
+\nocite{*}
+\printbibliography
 
 \end{document}

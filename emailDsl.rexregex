@@ -1,0 +1,34 @@
+define ipAddress as
+    begin separatedBy(".")
+        1 to 3 of DIGIT
+    end
+end
+define legalChar as
+    any except of
+        "<", ">", "(", ")", "[", "]"
+        "\\", ".", ",", ";", ":", "@"
+        DOUBLE_QUOTE
+        SPACE
+    end
+end
+either
+    begin separatedBy(".", "optional")
+        many of legalChar
+    end
+or
+    begin wrappedIn(DOUBLE_QUOTE)
+        many of any
+    end
+end
+"@"
+either
+    wrapIn("[", "]", ipAddress)
+or
+    many of
+        many of
+            any of LETTER.EN, DIGIT, "-"
+        end
+        "."
+    end
+    2 to many of LETTER.EN
+end

@@ -1,0 +1,202 @@
+
+
+\newtcbox{\hlh}[1][orange]{on line, 
+        colback=#1!100!white,
+        boxrule=0pt, 
+        boxsep=0pt,
+        left=5pt,
+        right=5pt,
+        top=3pt,
+        bottom=8pt
+}
+
+
+\newtcbox{\hl}[1][gray]{on line, 
+        colback=#1!100!white,
+        boxrule=0pt, 
+        boxsep=0pt,
+        left=5pt,
+        right=5pt,
+        top=8pt,
+        bottom=5pt
+}
+
+\newtcbox{\matchedBox}[1][gray]{on line, 
+        colback=#1!100!white,
+        boxrule=0pt, 
+        boxsep=0pt,
+        left=0pt,
+        right=1pt,
+        top=5pt,
+        bottom=5pt
+}
+
+\newtcbox{\matchedBoxSmall}[1][gray]{on line, 
+        colback=#1!100!white,
+        boxrule=0pt, 
+        boxsep=0pt,
+        left=0pt,
+        right=1pt,
+        top=2pt,
+        bottom=2pt
+}
+
+\newcommand*{\hly}[1]{\hl[yellow]{#1}}
+\newcommand*{\hlg}[1]{\hl[lime]{#1}}
+
+\newtcbox{\codeBox}[1][gray]{on line, 
+        % arc=7pt,
+        colback=#1!30!white,
+        colframe=#1!30!white,
+        % colframe=#1!50!black,
+        before upper={\rule[-3pt]{0pt}{10pt}},
+        boxrule=0pt, 
+        boxsep=0pt,
+        left=3pt,
+        right=3pt,
+        top=2pt,
+        bottom=1pt
+}
+
+
+\newtcbox{\patternBox}[1][white]{on line, 
+        arc=2pt,
+        colback=#1!30!white,
+        colframe=#1!20!black,
+        % colframe=#1!50!black,
+        before upper={\rule[-3pt]{0pt}{10pt}},
+        boxrule=1pt, 
+        boxsep=0pt,
+        left=3pt,
+        right=3pt,
+        top=2pt,
+        bottom=1pt
+}
+
+\setlength{\marginparwidth}{2cm}
+\newcommand*{\regex}[1]{{\fontfamily{qcr}\selectfont #1}}
+\newcommand*{\pattern}[1]{\patternBox{\regex{#1}}}
+\newcommand*{\inp}[1]{\enquote{\regex{#1}}}
+\newcommand*{\code}[1]{\codeBox{\texttt{#1}}}
+\newcommand{\keyword}[1]{\texttt{#1}}
+\newcommand*{\matched}[1]{\matchedBox[yellow]{#1}}
+\newcommand*{\matchedSmall}[1]{\matchedBoxSmall[yellow]{#1}}
+
+\newcommand*{\bs}{\textbackslash}
+\newcommand*{\caret}{\string^}
+\newcommand*{\dollar}{\string$}
+
+\newcommand*{\openBracket}{\texttt{[}}
+\newcommand*{\closingBracket}{\texttt{]}}
+\newcommand*{\inBrackets}[1]{\openBracket #1\closingBracket}
+
+\newcommand*{\placeholder}{\emph{<pattern>}}
+\newcommand*{\expr}{\emph{<expression>}}
+
+
+\lstdefinelanguage{rexregex} {}
+
+\lstdefinestyle{shared}{
+    numbers=left,
+    numberstyle=\scriptsize\color{black},
+    numbersep=14pt,
+    basicstyle=\ttfamily,
+}
+
+\lstdefinestyle{rexregex}{
+    style=shared,
+    morekeywords={as,or,of,to,}, 
+    keywordstyle=\color{black}\bfseries,
+    identifierstyle={\color{Bittersweet}},
+    emph={any,define,either,many,same,begin,maybe,end},
+    emphstyle={\color{blue!80!black}\bfseries},
+    morestring={[b]"},
+    stringstyle=\color{red},
+}
+
+\lstnewenvironment{rexregex}[1][]{\lstset{language=rexregex,style=rexregex,#1}}{}
+
+\newcommand*{\ws}{\char32}
+
+\newtcolorbox[blend into=figures]{boxFigure}[1][]{float=htb, halign=center,  every float=\centering, #1, colback=white, colframe=green!70!black}
+        
+
+\tcbset{myTabStyle/.style={
+    enhanced,
+    colback=white!10!white,
+    colframe=orange!70!black,
+    colbacktitle=orange!90!white, 
+    coltitle=black,
+}}
+
+\newcommand*{\mytoprule}{\specialrule{1.5pt}{0pt}{0pt}}
+
+\newtcolorbox[blend into=tables]{boxTable}[2][]{halign=center,  title={#2}, every float=\centering, #1, colback=white, colframe=orange!90!black}
+
+\newtcolorbox[blend into=tables]{newBoxTable}[2][]{myTabStyle,halign=center, every float=\centering, #1, colback=orange!20!white, colframe=orange!90!black, tabularx*={\renewcommand{\arraystretch}{1}}{#2},boxrule=1.5pt}
+
+\tcbset{lstBox/.style={
+    listing only,
+    enhanced,
+    colframe=blue!90!white, 
+    left=8mm,
+    halign=center, 
+    every float=\centering, 
+    colback=white, 
+    boxrule=1.5pt,
+    before={\vspace{5mm}},
+}}
+
+\AtBeginDocument{
+    \newtcblisting[blend into=listings]{rexregexBox}[1][]{% 
+        lstBox,
+        listing options = { 
+            style=rexregex,
+            escapechar={\%},
+        },
+        #1,
+        colback=cyan!5!white,
+        borderline west={0.5mm}{17pt}{blue!90!white},
+    }
+
+    \newtcblisting[blend into=listings]{pseudoCode}[1][]{% 
+        lstBox,
+        #1,
+        colback=cyan!5!white,
+        borderline west={0.5mm}{17pt}{blue!90!white},
+        listing options = { 
+            mathescape=true,
+            style=shared,
+            basicstyle=\small\ttfamily,
+            morekeywords={function,mod,switch,return,case,for,to,if,else,end,until}, 
+            keywordstyle=\color{black}\bfseries,
+            %identifierstyle={\color{orange!90!black}},
+            %emph={any,define,either,many,same,begin,maybe,end},
+            %emphstyle={\color{blue!80!black}},
+            morestring={[b]"},
+            stringstyle=\color{red},
+            escapechar={\%}
+        },
+    }
+
+    \newtcolorbox[blend into=listings]{listingBox}[1][]{% 
+        lstBox,
+        #1,
+        colback=cyan!5!white,
+        listing options = { 
+        style=shared,
+        mathescape=true },
+    }
+
+    \newtcolorbox{inferInputBox}[0][]{
+        lstBox,
+        colback=cyan!5!white,
+    }
+}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcommand{\rexinline}[1]{\code{\lstinline[style=rexregex]{#1}}}
+
+\newcommand*{\utgast}{\textsc{utgast}}
+

@@ -1,0 +1,44 @@
+\chapter{Introduction}
+
+Regular expressions are an integral part of modern software development but also exhibit serious flaws that make using them challenging and error-prone. This work presents RexRegex, a domain specific language that addresses these issues.
+
+\section{Regular Expressions}
+
+Regular expressions or regex refer to string processing tools and libraries that simulate finite state machines to determine whether a string or substring is matched. The inner workings of the finite state machine is expressed in string patterns whose compact nature is loved and hated by developers. Chapter \ref{chapter:intro} gives a detailed introduction into the topic while chapter \ref{chapter:motivation} discusses the flaws of regex.
+
+\section{Domain Specific Languages}
+
+Most popular programming languages are so called general purpose languages which solve a wide variety of problems. Each has its strength and weaknesses but can be used more or less interchangeably. Domain specific languages (DSL)  on the other hand are far more specialized and focus on a single or small group of tasks. DSLs cannot be used for all programming tasks but provide more convenient ways to solve problems in their domain. Regular expressions themselves are an example for a domain specific language for string processing. Other examples include cascading style sheets (CSS), structured query language (SQL) and hardware description language (HDL).
+
+Domain specific languages can be categorized into internal and external DSLs. External DSLs work similar to general purpose programming languages. The DSL code is parsed from a string and either compiled to a target language or executed by an interpreter. This approach allows for a large degree of freedom in the syntax of the language. Internal DSLs on the other hand are implemented inside a host language that takes care of the parsing and execution of the DSL code. This is more restrictive but also allows for a seamless integration with the host language. Most internal DSLs take the form of classes, functions, macros or combination thereof. There is no clear differentiation between libraries and internal DSLs which is why they are also referred to as fluent interfaces \cite{FluentInterfacesFowler}.
+
+\section{Contributions}
+
+This work presents a detailed analysis of the current state of regular expressions, how they are used and what issues they have. In combination with considerations about the user groups this information will guide the design principles that govern the DSL. 
+
+It presents RexRegex, a domain specific language that combines an internal and external DSL to accommodate the differing requirements of programmers and non-programmers. This language addresses many of the issues of regular expressions and provides a better user experience. It is extensible and allows the user to define their own abstractions.
+
+To ensure the correctness of the generated regex it introduces a novel testing methodology in form of \utgast{} (Unit Test Generating Abstract Syntax Tree) that guarantees that the semantics of the language are consistent across compilation targets. It also provides a mechanism to infer DSL code from string examples.
+
+\section{Related Work} \label{sec:relatedWork}
+
+There are a few programming languages that provide an internal DSL for assembling a regular expression. During the \textsc{wwdc22} Apple revealed their regex DSL for the swift programming language \cite{RegexDslSwift} which sparked further interest in the subject.
+
+In the C\# ecosystem there are several approaches to address this need, most prominently the extension of the LINQ \cite{linq} framework to generate regex \cite{RegexDslLinq} which is in turn based on ReadableRex \cite{RegexDslReadableRex}. There are also similar projects for Scala \cite{RegexDslRel} and Rust \cite{RegexDslPomsky}. 
+
+Some DSLs preserve most of regex's syntax and only simplify the embedding and composition of them while others introduce additional abstractions and stay closer to the conventions of the host language.
+
+There are also external DSLs for regex but only few gained popularity. A project of note is Melody \cite{RegexDslMelody} which shares the most commonalities with this work. It also compiles to Javascript regex and has a comparable syntax but sticks closer to that of programming languages compared to the more free form approach this work takes.
+
+While there are many solutions available, none address the portability issue of regular expressions which are a primary focus of this work. It also tries to improve upon the appeal to non-programmers.
+
+\section{Notations}
+
+This work uses the following conventions:
+
+\begin{itemize}
+    \item \pattern{regular expression}
+    \item \code{DSL or programming language code}
+    \item \inp{input string}
+    \item \inp{input string with \matched{matched substring}}
+\end{itemize}
