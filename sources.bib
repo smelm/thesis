@@ -1,31 +1,455 @@
-@article{DBLP:journals/corr/abs-2105-04397,
-  author    = {James C. Davis and
-               Louis G. Michael IV and
-               Christy A. Coghlan and
-               Francisco Servant and
-               Dongyoon Lee},
-  title     = {Why Aren't Regular Expressions a Lingua Franca? An Empirical Study
-               on the Re-use and Portability of Regular Expressions},
+@book{AutomataTheoryLanguagesAndComputation,
+    title = {Introduction to Automata Theory, Languages, and Computation},
+    author = {John Hopcroft and Rajeev Motwani and Jeffrey D. Ullman},
+    edition = {3},
+    year = {2007}
+}
+
+@book{TheoryOfComputation,
+    title = {Introduction to the Theory of Computation},
+    author = {Michael Sipser},
+    edition = {3},
+    year = {2013}
+}
+
+
+@book{MasteringRegex,
+    title = {Mastering Regular Expressions},
+    author = {Jeffrey E. F. Friedl},
+    edition = {3},
+    year = {2006}
+}
+
+@book{DesignOfEverydayThings,
+    title = {The Design of Everyday Things},
+    subtitle = {Revised and expanded edition},
+    author = {Don Norman},
+    year = {2013}
+}
+
+@article{RegularExpressionSearchAlgorithm,
+    author = {Thompson, Ken},
+    title = {Programming Techniques: Regular Expression Search Algorithm},
+    year = {1968},
+    editor = {R. M. McClure},
+    publisher = {Association for Computing Machinery},
+    volume = {11},
+    number = {6},
+    journal = {Commun. ACM},
+    month = {6},
+    pages = {419–422},
+}
+
+@inproceedings{RegexesAreHard,  
+    title={Regexes are Hard: Decision-Making, Difficulties, and Risks in Programming Regular Expressions},   
+    author={Michael, Louis G. and Donohue, James and Davis, James C. and Lee, Dongyoon and Servant, Francisco},  
+    booktitle={2019 34th IEEE/ACM International Conference on Automated Software Engineering (ASE)},   
+    year={2019},  
+    volume={},  
+    number={},  
+    editor = {},
+    pages={415-426},  
+}
+
+@inproceedings{RegexNotLinguaFranca,
+    author = {Davis, James C. and Michael IV, Louis G. and Coghlan, Christy A. and Servant, Francisco and Lee, Dongyoon},
+    title = {Why Aren’t Regular Expressions a Lingua Franca? An Empirical Study on the Re-Use and Portability of Regular Expressions},
+    year = {2019},
+    publisher = {Association for Computing Machinery},
+    booktitle = {Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+    pages = {443–454},
+}
+
+
+@article{DemystifyingRegexBugs,
+    author = {Wang, Peipei and Brown, Chris and Jennings, Jamie A. and Stolee, Kathryn T.},
+    title = {Demystifying Regular Expression Bugs: A Comprehensive Study on Regular Expression Bug Causes, Fixes, and Testing},
+    year = {2022},
+    publisher = {Kluwer Academic Publishers},
+    volume = {27},
+    number = {1},
+    journal = {Empirical Softw. Engg.},
+    month = {1},
+}
+
+@inproceedings{RedosInPractice,
+    author = {Davis, James C. and Coghlan, Christy A. and Servant, Francisco and Lee, Dongyoon},
+    title = {The Impact of Regular Expression Denial of Service (ReDoS) in Practice: An Empirical Study at the Ecosystem Scale},
+    year = {2018},
+    publisher = {Association for Computing Machinery},
+    booktitle = {Proceedings of the 2018 26th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+    pages = {246–256},
+    location = {Lake Buena Vista, FL, USA},
+    series = {ESEC/FSE 2018}
+}
+
+@online{RedosStackOverflowOutage,
+    url={http://stackstatus.net/post/147710624694/outage-postmortem-july-20-2016},
+    title = {Outage Postmortem},
+    year = {2016},
+    month = {7},
+    author = {Stack Exchange Network}
+}
+
+@online{RedosExpressJs,
+    title = {Regular Expression Denial of Service affecting Express.js},
+    author = {Adam Baldwin},
+    url = {https://medium.com/node-security/regular-expression-denial-of-service-affecting-express-js-9c397c164c43},
+    year = {2016}
+}
+
+@misc{StackoverflowImpossibleRegex,
+    title = {A Regex that will never be matched by anything},
+    url = {https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything},
+    author = {Florian Peschka and Mark Byers and Ferdinand Beyer and Alex Martelli},
+    year = {2009},
+    month = {11},
+}
+
+@misc{GnuCoreUtils,
+    title = {GNU Core Utils},
+    url = {https://www.gnu.org/software/coreutils/},
+    author = {GNU},
+    note = {commit: e3d6035}
+}
+
+@online{ViceProgrammingLanguagesProgrammersHate,
+    title = {A Catalog of Programming Languages that Programmers Hate},
+    subtitle = {From Perl to Python to Java.},
+    author = {Michael Byrne},
+    year = {2016},
+    month = {1},
+    url = {https://www.vice.com/en/article/3daqq8/a-catalog-of-programming-languages-that-programmers-hate}
+}
+
+@online{PitOfSuccess,
+    title = {Falling Into The Pit of Success},
+    author = {Jeff Atwood},
+    url = {https://blog.codinghorror.com/falling-into-the-pit-of-success},
+    year = {2007},
+    month = {8}
+}
+
+@online{UnicodeStandard15,
+    title = {Unicode Standard},
+    url = {https://www.unicode.org/versions/Unicode15.0.0/},
+    version = {15.0.0.}
+}
+
+@misc{LeaningToothpick,
+    author = {Gurusamy Sarathy, Karl Williamson },
+    title = {perlretut },
+    subtitle = {Perl regular expressions tutorial},
+    url = {https://perldoc.perl.org/perlretut},
+    version = {5.36.0}
+}
+
+@online{NowTwoProblems,
+    author = {Jeffrey Friedl},
+    title = {Source of the famous "Now you have two problems" quote},
+    url={http://regex.info/blog/2006-09-15/247},
+    year = {2006},
+    month = {9}
+}
+
+@misc{OnSuccessfulLanuageDesignKernighan,
+    title={On Successful Language Design},
+    url = {https://www.youtube.com/watch?v=Sg4U4r_AgJU},
+    author = {Brian Kernighan},
+    year = {2015}
+}
+
+@misc{RegexDslMelody,
+    title = {Melody},
+    author = {Yoav Lavi},
+    url = {https://gitub.com/yoav-lavi/melody.git}
+
+}
+
+@misc{RegexDslLinq,
+    title = {Introducing LINQ To Regex},
+    author = {Roy Osherove}, 
+    url = {https://osherove.com/blog/2008/5/6/introducing-linq-to-regex.html},
+}
+
+@misc{RegexDslReadableRex,
+    author = {Joshua Flanagan},
+    url = {https://blog.flimflan.com/ReadableRegularExpressions.html},
+    title = {Readable Regular Expressions},
+
+}
+
+
+@inproceedings{RegexDslSwift,
+    title = {Meet Swift Regex},
+    url = {https://developer.apple.com/videos/play/wwdc2022/110357/},
+    author = {Michael Ilseman},
+    year = {2022},
+    series = {WWDC2022},
+    publisher = {Apple}
+}
+
+@misc{RegexDslRel,
+    author = {Imaginatio},
+    title = {REL},
+    subtitle = {a Regular Expression composition Library},
+    url = {https://github.com/Imaginatio/REL}
+}
+
+@misc{RegexDslPomsky,
+    url = {https://github.com/rulex-rs/pomsky},
+    title = {Pomsky},
+    subtitle = {A portable, modern regular expression language},
+}
+
+@online{FluentInterfacesFowler,
+    url = {https://martinfowler.com/bliki/FluentInterface.html},
+    author = {Martin Fowler},
+    title = {FluentInterfaces}
+}
+
+@online{HackernoonCommonRegexMistakes,
+    url = {https://hackernoon.com/regexes-or-regular-expressions-and-the-common-mistakes-programmers-make-while-using-them-zh4p33it},
+    title = {Regexes or Regular Expressions And The Common Mistakes Programmers Make While Using Them},
+    year = {2021},
+    month = {2},
+    author = {SonarSource}
+}
+
+@misc{RegexErrorCamelLetterRange,
+  author = {Apache},
+  title = {Camel},
+  year = {2020},
+  url = {https://github.com/apache/camel/},
+  note = {commit: 41e5be0, file: KafkaHeaderFilterStrategy.java, line: 29}
+}
+
+@misc{RegexErrorElasticSearchLetterRange,
+    title = {Elasticsearch},
+    author = {elastic},
+    year = {2021},
+    url={https://github.com/elastic/elasticsearch/},
+    note = {commit: fc57255, file: RestRequest.java, line: 61}
+}
+
+@misc{RegexErrorQuizconnectSpecialRange,
+    title = {quizconnect},
+    author = {Johannes Koch},
+    year = {2019},
+    url={https://github.com/JFKakaJFK/quizconnect/},
+    note = {commit: cfb8392, file: RestRequest.java, line: 63}
+}
+
+@misc{RegexErrorJenkinsSpecialRange,
+    title = {Jenkins},
+    author = {Apache},
+    year = {2020},
+    url= {https://github.com/jenkinsci/jenkins},
+    note = {commit: 8c6327f, file: UrlValidator.java, line: 154}
+}
+
+@misc{RegexErrorHadoopNumberRange,
+    title = {Hadoop},
+    author = {Apache},
+    year = {2020},
+    note = {commit a89ca56, file: UrlValidator.java, line: 90},
+    url={https://github.com/apache/hadoop/},
+}
+
+@misc{RegexErrorApacheGeodeLetterRange,
+    title = {Geode},
+    author = {Apache},
+    year = {2020},
+    note = {commit: bc28eb2, file: AoclDiagnosticOutputParser.java, line: 38},
+    url={https://github.com/apache/geode/}
+}
+
+@misc{RegexErrorNlpChinaCharClassSep,
+    title = {ansj\_seg},
+    author = {NLPchina},
+    year = {2020},
+    note = {commit: f6774d6, file: CreateLuceneCommandParametersValidator.java, line: 28},
+    url={https://github.com/NLPchina/ansj_seg/}
+}
+
+@online{RegexErrorRoncooCharClassSep,
+    title = {roncoo-pay},
+    author = {roncoo},
+    year = {2020},
+    note = {commit: 3954527, file: ValidateUtils.java, line: 221},
+    url={https://github.com/roncoo/roncoo-pay/}
+}
+
+@book{CodedCharacterSets,
+    title = {Coded Character Sets, History and Development},
+    author = {Charles E. Mackenzie},
+    year = {1980}
+}
+
+@article{ChomskyCertainFormalPropertiesGrammars,
+    title = {On certain formal properties of grammars},
+    author = {Noam Chomsky},
+    journal = {Information and Control},
+    volume = {2},
+    number = {2},
+    pages = {137-167},
+    year = {1959},
+}
+
+@online{DenialOfService,
+    title = {Understanding Denial-of-Service Attacks},
+    year = {2009},
+    author = {CISA},
+    url = {https://www.cisa.gov/uscert/ncas/tips/ST04-015}
+}
+
+@book{refactoring,
+    title = {Refactoring},
+    author = {Martin Fowler, Kent Beck},
+    edition = {2},
+    year = {2018}
+}
+
+@article{bartoli2016inference, 
+  author={A. Bartoli and A. De Lorenzo and E. Medvet and F. Tarlao}, 
+  journal={IEEE Transactions on Knowledge and Data Engineering}, 
+  title={Inference of Regular Expressions for Text Extraction from Examples}, 
+  year={2016}, 
+  volume={28}, 
+  number={5}, 
+  pages={1217-1230}, 
+  month={4},
+}
+
+@inproceedings{bartoli2015evolutionary,
+  title={Evolutionary Learning of Syntax Patterns for Genic Interaction Extraction},
+  author={Bartoli, Alberto and De Lorenzo, Andrea and Medvet, Eric and
+  Tarlao, Fabiano and Virgolin, Marco},
+  booktitle={Proceedings of the 2015 on Genetic and Evolutionary Computation Conference},
+  pages={1183--1190},
+  year={2015},
+  organization={ACM}
+}
+@article{bartoli2016can,
+  title={Can a machine replace humans in building regular expressions? A case study},
+  author={Bartoli, Alberto and De Lorenzo, Andrea and Medvet, Eric and Tarlao, Fabiano},
+  journal={IEEE Intelligent Systems},
+  volume={31},
+  number={6},
+  pages={15--21},
+  year={2016},
+  publisher={IEEE}
+}
+
+@online{linq,
+    url={https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/},
+    author = {Bill Wagner and Genevieve Warren and Jason Martinez and David Coulter},
+    title = {Language Integrated Query (LINQ)},
+    year = {2022},
+    month = {10}
+}
+
+@misc{regexIsContextFree,
+    title = {The true power of regular expressions},
+    author = {Nikita Popov},
+    year = {2012},
+    month = {07},
+    url= {https://www.npopov.com/2012/06/15/The-true-power-of-regular-expressions.html}
+}
+
+
+@online{regexWithComments,
+    url = {https://www.geeksforgeeks.org/verbose-in-python-regex/},
+    title = {Verbose in Python Regex},
+    author = {Pooja Rani},
+    year = {2019},
+    month = {7},
+}
+
+@misc{brainfuckExample,
+    url ={https://github.com/cagataycali/awesome-brainfuck/blob/master/self-interpreters/#L271},
+    author = {Clive Gifford},
+    version = {2},
+    title = {Brainfuck Self Interpreter},
+    year = {2017},
+    note = {commit: 1d7e330, file: by-clive-gifford.bf, line: 271-276}
+}
+
+@online{WriteOnlyLanguage,
+    title = {Write-only code},
+    year = {2020},
+    month = {5},
+    url = {https://7c0h.com/blog/new/write_only_code.html},
+    author = {Martín Villalba},
+
+}
+
+@misc{SoritesParadox,
+    title = {Sorites Paradox},
+    author = { Dominic Hyde and Diana Raffman },
+    url = {https://plato.stanford.edu/entries/sorites-paradox/},
+    year = {2018},
+    month = {5},
+    journal = {Stanford Encyclopedia of Philosophy}
+}
+
+@misc{ZenOfPython,
+    title = {The Zen of Python},
+    volume = {20},
+    author = {Tim Peters},
+    year = {2004},
+    month = {8},
+    url = {https://peps.python.org/pep-0020/},
+
+}
+
+@article{GuidedGrammarConvergence,
+  author    = {Vadim Zaytsev},
+  title     = {Guided Grammar Convergence},
   journal   = {CoRR},
-  volume    = {abs/2105.04397},
-  year      = {2021},
-  url       = {https://arxiv.org/abs/2105.04397},
-  eprinttype = {arXiv},
-  eprint    = {2105.04397},
-  timestamp = {Fri, 14 May 2021 12:13:30 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-2105-04397.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+  year      = {2015},
 }
 
-@article{regex_is_context_free,
-    url= {https://www.npopov.com/2012/06/15/The-true-power-of-regular-expressions.html#matching-context-free-languages}
+@article{BidirectionalGrammarsForMachineCode,
+  title={Bidirectional grammars for machine-code decoding and encoding},
+  author={Tan, Gang and Morrisett, Greg},
+  journal={Journal of Automated Reasoning},
+  volume={60},
+  number={3},
+  pages={257--277},
+  year={2018},
+  publisher={Springer}
 }
 
-@article{regex_at_scale,
-    url={https://www.loggly.com/blog/lessons-learned-from-using-regexes-at-scale/}
+@inproceedings{EvilTestStrings,  
+    author={Larson, Eric and Kirk, Anna},  
+    booktitle={2016 IEEE International Conference on Software Testing, Verification and Validation (ICST)},   
+    title={Generating Evil Test Strings for Regular Expressions},   
+    year={2016},  
+    volume={},  
+    number={},  
+    pages={309-319},  
 }
 
-@article{regular_expression_matching_can_be_simple_and_fast,
-    title={Regular Expresson Matching Can Be Simple And Fast},
-    url={https://swtch.com/~rsc/regexp/regexp1.html}
+@inproceedings{MutRex,  
+    author={Arcaini, Paolo and Gargantini, Angelo and Riccobene, Elvinia},  
+    booktitle={2017 IEEE International Conference on Software Testing, Verification and Validation Workshops (ICSTW)},   
+    title={MutRex: A Mutation-Based Generator of Fault Detecting Strings for Regular Expressions},   
+    year={2017},  
+    volume={},  
+    number={},  
+    pages={87-96}  
 }
+
+@online{noxoneRegexGenerator,
+    author = {Olaf Neumann and Lars Knickrehm and Maxime Boucher},
+    title = {regex-generator},
+    url = {https://github.com/noxone/regex-generator}
+}
+
+@online{EmailRegex,
+    url = {https://www.emailregex.com/},
+    title = {Email Address Regular Expression That 99.99\% Works.},
+    author = {ZenBase}
+}
+

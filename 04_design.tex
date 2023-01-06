@@ -127,7 +127,7 @@ Namespaces are one honking great idea - let's do more of those!
 
 \subsection{Two is better than one} \label{sec:twoIsBetter}
 
-When looking at the different requirements of programmers and non-programmers, it becomes obvious that some of them are mutually exclusive. The only obvious way to bridge this gap are compromises and trade-offs which would inevitably reduce the appeal to one of the demographics. This thesis will take another approach. Rather than choosing a one-size-fits-all solution, it introduces two different DSLs -- an internal and an external one -- that addresses the groups individually. By designing the architecture with this in mind, the two languages can complement each other.
+When looking at the different requirements of programmers and non-programmers, it becomes obvious that some of them are mutually exclusive. The only obvious way to bridge this gap are compromises and trade-offs which would inevitably reduce the appeal to one of the demographics. This work will take another approach. Rather than choosing a one-size-fits-all solution, it introduces two different DSLs -- an internal and an external one -- that addresses the groups individually. By designing the architecture with this in mind, the two languages can complement each other.
 
 \subsection{Verbosity and Readability}
 
@@ -143,7 +143,7 @@ This clearly introduces a lot of complexity and ambiguity into regular expressio
 
 Regular expressions give the user access to a lot of fine-tuning. With constructs like atomic groups, look-aheads and lazy quantifiers the user can influence the matching behavior of the regex engine significantly. This fine-grained control makes regex a powerful tool in the hands of experienced users but also causes mental overhead and readability problems. 
 
-While it is not the goal of this thesis to remove expressive power from regex, it may be a necessary trade-off to achieve a less complicated language interface. As a compromise, the decisions will be based on the analysis of regex usage in \ref{sec:analysisRegexUsage}
+While it is not the goal of this work to remove expressive power from regex, it may be a necessary trade-off to achieve a less complicated language interface. As a compromise, the decisions will be based on the analysis of regex usage in \ref{sec:analysisRegexUsage}
 and abstractions will be introduced that provide the same expressive power for more narrow use cases but hide the internal complexity from the user. These features can always be included in the programmer facing DSL later, if the need arises. This should allow both user groups to treat string processing like a declarative task of describing the input, instead of listing instructions to a regex engine.
 
 \subsection{Consistency}
