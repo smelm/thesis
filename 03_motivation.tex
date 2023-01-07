@@ -1,4 +1,4 @@
-\chapter{Motivation and Issues of Regex} \label{chapter:motivation}
+\chapter{Issues of Regular Expressions} \label{chapter:motivation}
 
 Regex are a powerful and widely used tool for string processing. Estimates show that a third of Javascript and Python projects make use of them in some capacity \cite{RedosInPractice}. 88\% of surveyed programmers state that regex are a valuable tool \cite{RegexesAreHard}. Yet they also come with significant drawbacks that cause some developers to refrain from using them altogether or to copy them from the internet whole-cloth (see fig \ref{fig:regexReuse}) \cite{RegexesAreHard}. This chapter will analyse the reasons that cause these issues.
 
@@ -82,7 +82,7 @@ This perception is by no means unique to the author of the article. 65\% of prog
 
 An analysis of the 537,806 patterns from the polyglot regex corpus \cite{RegexNotLinguaFranca} shows that regular expressions contain more special characters than normal letters (see table \ref{tab:regexCharDist}). While programmers are used to a certain amount of special characters, this is a lot more than any codebase would have. For a comparison, of the $1.851.901$ characters of the gnu-core-utils codebase \cite{GnuCoreUtils} only about 20\% are special characters while 78\% are normal letters. This imbalance is not helped by the fact that, by default, regular expressions do not allow whitespaces. It comes as no suprise that 70\% of surveyed developers find regular expressions to be less readable than normal code \cite{RegexesAreHard}.
 
-\begin{newBoxTable}[title={Character Distribution in Regex},label=tab:regexCharDist,width=11cm]{X|r|r|r}
+\begin{newBoxTable}[title={Character Distribution in Regex},label=tab:regexCharDist,width=11cm,center]{X|r|r|r}
         Character Type & Count  & \% & Mean per Pattern \\ \mytoprule
         Letters   & 8,432,429  & 42.66  & 7.97  \\ \hline
         Digits    & 1,038,590  &  5.25  & 0.98  \\ \hline
@@ -105,7 +105,7 @@ This is no exception and applies to most special characters. The user must remem
 
 Another problem stems from the fact that how regular expressions look differs from how they work. It is easy for a user to assume that regex are a description of how the matching input looks like. Most expressions look like the expected matching input string with some parts replaced by special patterns. The pattern \pattern{".*"} from figure \ref{fig:regexSurroundingTooGreedy} seems like a correct regular expression because it has the same shape as the expected input string. The user is tempted to believe that regular expressions are a declarative language, while it is actually procedural. 
 
-\begin{newBoxTable}[title={Ambiguity of the Question Mark Character},label=tab:questionMark,width=12cm]{X|X}
+\begin{newBoxTable}[title={Ambiguity of the Question Mark Character},label=tab:questionMark,width=12cm,center]{X|X}
     Pattern & Meaning \\ \mytoprule
     \regex{\bs ?}, \regex{[?]} & literal question mark \\ \hline
     \regex{a?} & optional a \\ \hline

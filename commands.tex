@@ -131,9 +131,10 @@
 
 \newcommand*{\mytoprule}{\specialrule{1.5pt}{0pt}{0pt}}
 
-\newtcolorbox[blend into=tables]{boxTable}[2][]{halign=center,  title={#2}, every float=\centering, #1, colback=white, colframe=orange!90!black}
+\newtcolorbox[blend into=tables]{boxTable}[2][]{halign=center,  title={#2}, every float=\centering, #1, colback=white, colframe=orange!90!black,before={\vspace{3mm}}}
+    
 
-\newtcolorbox[blend into=tables]{newBoxTable}[2][]{myTabStyle,halign=center, every float=\centering, #1, colback=orange!20!white, colframe=orange!90!black, tabularx*={\renewcommand{\arraystretch}{1}}{#2},boxrule=1.5pt}
+\newtcolorbox[blend into=tables]{newBoxTable}[2][]{myTabStyle,halign=center, every float=\centering, #1, colback=orange!20!white, colframe=orange!90!black, tabularx*={\renewcommand{\arraystretch}{1}}{#2},boxrule=1.5pt,before={\vspace{3mm}}}
 
 \tcbset{lstBox/.style={
     listing only,

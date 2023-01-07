@@ -26,6 +26,34 @@ The macro and extension system allow the language to grow in a maintainable fash
 
 While the success of a language is multi-faceted, it is justified to say that RexRegex fulfills the necessary requirements: it \enquote{solve[s] a real problem in a clearly better way} \cite{OnSuccessfulLanuageDesignKernighan}.
 
+\section{Research Questions}
+
+During the course of this text all research questions posed in \ref{chapter:introtoall} were discussed and the findings are summarised here.
+
+\subsubsection{RQ1: \RQone}
+
+A significant portion of users perceive regular expressions as daunting and are not confident in their ability to use them. For this reason, they resort to reusing regex from other sources which introduces errors and compatibility problems. Regex Denial of Service (ReDoS) attacks present a security risk.
+
+\subsubsection{RQ2: \RQtwo}
+
+Poor readability is the root cause of most problems of regular expressions and makes using them error-prone and confusing. Its semantics that appear declarative but are procedural also contributes to this issue. Many pattern -- like the super-linear patterns enabling ReDoS -- can only be understood by mentally simulating the matching process. 
+
+\subsubsection{RQ3: \RQthree}
+
+On average, more than 50\% of the characters in regex are special characters and 30\% of patterns need to escape at least one of them, which gives a reasonable explaination for their poor readability. Every other developer reuses more than half of the regex patterns from other sources. An equal number of developers belief that regular expressions are compatible across languages, which is not the case \cite{RegexNotLinguaFranca}.
+
+\subsubsection{RQ4: \RQfour}
+
+RexRegex addresses the readability issues by requiring the user to escape sequences that are supposed to match themselves while treating everything else as a special instructions by default. This allows the language to express regex concepts in syntax inspired by English instead of single characters. Concepts that relate too closely to the inner-workings of the regex engines were excluded from the language and replaced with high-level abstractions.
+
+\subsubsection{RQ5: \RQfive}
+
+The \utgast{} framework automatically generates positive and negative test strings from RexRegex AST nodes. These can be used as unit tests to verify that the produced regular expression exihibits the expected behavior in any regex dialect it is compiled to.
+
+\subsubsection{RQ6: \RQsix}
+
+The work of Machine Learning Lab implements a genetic algorithm that infers regular expressions based on string examples. By transforming the AST this algorithm uses into the AST that RexRegex uses, it is possible to leverage their work to infer DSL code from string examples.
+
 \section{Further Work}
 
 There is still room for improvement in RexRegex. Extending the standard library is one of the priorities. Another one is to improve the error reporting during parsing to make it more user-friendly. It would also be beneficial to implement a linting mechanism that detects valid DSL that compiles to problematic patterns. This can include ranges like \code{"A" to "z"} that are most likely wrong or even super-linear patterns.

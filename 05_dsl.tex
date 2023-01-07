@@ -1,4 +1,4 @@
-\chapter{Language Specification}
+\chapter{Approach: Language Specification}
 
 This chapter presents the DSL RexRegex and introduces the \textsc{utgast} (Unit Test Generating Abstract Syntax Tree) framework that is used to verify the correctness of the DSL compiler.
 
@@ -112,7 +112,7 @@ An expression can be marked as optional -- i.e. repeated zero or one time -- wit
 
 The regex concepts \pattern{\placeholder *} and \pattern{\placeholder +} were challenging to translate into the DSL. Both are associated with natural language concepts such as \inp{many}, \inp{a lot} or \inp{any number of} and it is hard to find two terms that are distinguishable enough. Because of this, RexRegex only represents \pattern{+} with the \code{many of \expr} pattern and provides no shorthand for \pattern{*} since it is more natural for many to not include zero. It may still be confusing that a single character qualifies as many but the DSL cannot resolve Sorites paradox \cite{SoritesParadox}. To express the \pattern{*}, quantifier the explicit range \code{0 to many of \expr} must be used. The \code{many} keyword is reused from the range quantifiers to keep the set of keywords small.
 
-\section{Lazy and Possessive Quantifiers}
+\subsection{Lazy and Possessive Quantifiers}
 
 Lazy quantifiers can be used in the internal DSL as an optional argument \code{repeat(expr, lower, upper, lazy=false)} but are a lot more problematic in the external DSL. They are a procedural concept by nature and stand in conflict with the declarative design principle (see section \ref{sec:declarativeOverImparative}). This made it hard to find keywords that could express them. Following the Zen of Python (listing \ref{fig:zenOfPython}) \inp{If the implementation is hard to explain, it's a bad idea}, it was deemed a bad idea and not included in the external DSL as a primitive. High-level abstractions may still compile to lazy quantifiers but this implementation detail will not be visible for the user.
 
@@ -151,6 +151,10 @@ Since it is common practice to start a pattern overly restrictive and relax the 
 \end{itemize}
 
 in the preamble. This is not only more explicit but also more natural since this makes a statement about the entire pattern and does not introduce the abstract concept of a zero-width anchor.
+
+\section{Look-arounds}
+
+For a similar reason RexRegex does not implement look-arounds as primitives. While it would be easy to add them to the language in form of \code{(not) followed by} and \code{(not) following} blocks, they do not function within the design principles of the language. They do not consume the input they are testing which is an unintuitive behavior even for experienced users. Instead, RexRegex provides the \code{not \expr but \expr} construct that directly attaches a negative look-around to the pattern that must be matched instead. It can be used as a more general version of the \code{any of ... except} construct used for character classes.
 
 \section{Groups and Backreferences}
 
@@ -194,14 +198,6 @@ This not only allows RexRegex to provide a small standard library but also to lo
 
 Listing \ref{code:emailPattern} showcases a full example of the RexRegex DSL. Matching email addresses is a notoriously difficult task and the regex that achieves it (see listing \ref{code:emailRegex}) is challenging to read \cite{EmailRegex}. While verbose, the DSL code is a lot easier to read and understand.
 
-
-{
-\hypersetup{citecolor=white}
-\begin{listingBox}[title={Regex for Validating Email Addresses \cite{EmailRegex}},label=code:emailRegex]
-    \lstinputlisting[basicstyle=\small\bfseries\ttfamily,nolol]{./emailRegex.txt}
-\end{listingBox}
-}
-
 \begin{rexregexBox}[float=htbp,title={RexRegex Code for Validating Email Addresses},breakable,label=code:emailPattern,width=13cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily}]
 define ipAddress as
     begin separatedBy(".")
@@ -240,7 +236,12 @@ or
 end
 \end{rexregexBox}
 
-\newtcolorbox[blend into=listings]{inferedExample}[1][]{lstBox,#1}
+{
+\hypersetup{citecolor=white}
+\begin{listingBox}[float=htb,title={Regex for Validating Email Addresses \cite{EmailRegex}},label=code:emailRegex]
+    \lstinputlisting[basicstyle=\small\bfseries\ttfamily,nolol]{./emailRegex.txt}
+\end{listingBox}
+}
 
 \section{Semantic Verification} \label{sec:verification}
 
@@ -251,8 +252,6 @@ The tests cannot test the syntax of the generated regex; they must test its sema
 When a test case for the quantifier behavior in \code{many of "a"} is added, it may be forgotten in the test for \code{many of any}. Since the test case tests a quantifier behavior, it is needed in both. This represents a form of code duplication \cite[p.~4]{refactoring}. It is caused by the fact that regex and RexRegex are inherently nested while strings are sequential by nature. This work proposes a conceptually simple solution: the DSL must become its own testing framework.
 
 RexRegex does not only provide a mechanism for transforming the AST to regex, but also to generate positive and negative test samples for testing from it. This leverages the nested nature of the DSL to test the nested semantics of regex. Since it is the AST that produces these unit tests, it is called the Unit Test Generating Abstract Syntax Tree (\textsc{utgast}) framework.
-
-\subsubsection{Generating Positive Samples}
 
 \begin{pseudoCode}[title={Generating Positive Test Samples},breakable=true,label=code:verificationPositive]
 function positiveSamples(node, root):
@@ -288,6 +287,8 @@ function positiveSamples(node, root):
       return group.positiveSamples %\label{code:positiveBackrefEnd}%
 \end{pseudoCode}
 
+\subsubsection{Generating Positive Samples}
+
 The generation of positive samples is shown in listing \ref{code:verificationPositive}. To ensure reproducibility random operations are executed with a random seed that is fixed for each test run. The function receives the current AST \code{node} and the entire \code{ast}, which is used for context, as parameters.
 
 The only positive sample for a character is that character, while any random character is matched by and therefore a positive sample for the \code{any} construct (see lines \ref{code:positivesCharStart}--\ref{code:positivesAnyEnd}). The helper function \code{randomChar} produces a random character code in a given range, which defaults to the unicode range. This could be further improved by generating characters from different unicode ranges like Latin or Cyrillic characters.
@@ -303,6 +304,25 @@ The positive samples for any quantifier can be generated by repeating the child 
 The samples for backreferences require information about the samples generated by the corresponding group. For this reason, the produced samples are stored and can be accessed via tree search from the \code{root} node (see lines \ref{code:positiveBackrefStart}--\ref{code:positiveBackrefEnd}).
 
 \subsubsection{Generating Negative Samples}
+
+The generation of negative samples is shown in listing \ref{code:verificationNegative}. The negative sample for a character is any other character, while \code{any} does not have negative samples since it matches everything (see lines \ref{code:negativeCharStart}--\ref{code:negativeAnyEnd}). The negative samples for character classes are just the positive samples of the inverted class \pattern{[\caret \emph{<class>}]}. Thanks to the internal representation as lists of non-overlapping ranges, this just requires creating the ranges between the upper and lower bounds and the minimum and maximum values (see lines \ref{code:negativeClassStart}--\ref{code:negativeClassEnd}).
+
+Following De Morgan's law, the negation of alternatives -- which are a union -- is the intersection of all negated child nodes:
+
+\vspace{-1em}
+\begin{equation*}
+    \bigcap_{\text{c } \in \text{ children}} \hspace{-.7em}\overline{c}
+\end{equation*}
+\vspace{-1em}
+
+Since the negation of a node can potentially be infinite, this intersection is determined implicitly by using partial compilation. All alternatives are compiled to regex and when they match a sample it is removed (see lines \ref{code:negativeAltStart}--\ref{code:negativeAltEnd}).
+
+Since any element and combination of elements can cause a sequence to not match, it can produce a lot of negative samples. For sequence length $n$ and $k$ not matching sequence elements alone there are ${k}\choose{n}$ possibile combinations. To prevent combinatorial explosion, only cases where one element is negative are considered. This also simplifies the algorithm which is then only required to split the \code{children} into a prefix and suffix for which the positive samples are generated and the negative samples of the $i$th element are inserted between them. The function \code{combine} represents the same algorithm that was used to combine the positive samples (see listing \ref{code:verificationPositive}, lines \ref{code:positiveSeqStart}--\ref{code:positiveSeqEnd}). If cases of two proverbial wrongs making a right were to be discovered, this approach would need to be supplemented.
+
+The generation for quantifier consists of two parts: positive samples that are repeated by an amount outside of the range (lines \ref{code:negativeRepPosStart}--\ref{code:negativeRepPosEnd}) and negative samples that are repeated within the bounds (lines \ref{code:negativeRepNegStart}--\ref{code:negativeRepNegEnd}).
+Negative samples for backreference can be generated by any derangement (permutation without trivial cycles) of the positive samples of the corresponding group. Since most derangement algorithms are far from trivial, only a random rotation (shift of all list elements) is used.
+
+Together these two algorithms can create a complete test suite from a given set of DSL examples which can be used to verify the compilation results indenpendently of the regex dialect.
 
 \begin{pseudoCode}[title={Generating Negative Test Samples},breakable=true,label=code:verificationNegative]
 function negativeSamples(node):
@@ -363,24 +383,6 @@ function negativeSamples(node):
       return rotate(group.positiveSamples, shiftBy) %\label{code:negativeBackrefEnd}%
 \end{pseudoCode}
 
-The generation of negative samples is shown in listing \ref{code:verificationNegative}. The negative sample for a character is any other character, while \code{any} does not have negative samples since it matches everything (see lines \ref{code:negativeCharStart}--\ref{code:negativeAnyEnd}). The negative samples for character classes are just the positive samples of the inverted class \pattern{[\caret \emph{<class>}]}. Thanks to the internal representation as lists of non-overlapping ranges, this just requires creating the ranges between the upper and lower bounds and the minimum and maximum values (see lines \ref{code:negativeClassStart}--\ref{code:negativeClassEnd}).
-
-Following De Morgan's law, the negation of alternatives -- which are a union -- is the intersection of all negated child nodes:
-
-\vspace{-1em}
-\begin{equation*}
-    \bigcap_{\text{c } \in \text{ children}} \hspace{-.7em}\overline{c}
-\end{equation*}
-\vspace{-1em}
-
-Since the negation of a node can potentially be infinite, this intersection is determined implicitly by using partial compilation. All alternatives are compiled to regex and when they match a sample it is removed (see lines \ref{code:negativeAltStart}--\ref{code:negativeAltEnd}).
-
-Since any element and combination of elements can cause a sequence to not match, it can produce a lot of negative samples. For sequence length $n$ and $k$ not matching sequence elements alone there are ${k}\choose{n}$ possibile combinations. To prevent combinatorial explosion, only cases where one element is negative are considered. This also simplifies the algorithm which is then only required to split the \code{children} into a prefix and suffix for which the positive samples are generated and the negative samples of the $i$th element are inserted between them. The function \code{combine} represents the same algorithm that was used to combine the positive samples (see listing \ref{code:verificationPositive}, lines \ref{code:positiveSeqStart}--\ref{code:positiveSeqEnd}). If cases of two proverbial wrongs making a right were to be discovered, this approach would need to be supplemented.
-
-The generation for quantifier consists of two parts: positive samples that are repeated by an amount outside of the range (lines \ref{code:negativeRepPosStart}--\ref{code:negativeRepPosEnd}) and negative samples that are repeated within the bounds (lines \ref{code:negativeRepNegStart}--\ref{code:negativeRepNegEnd}).
-Negative samples for backreference can be generated by any derangement (permutation without trivial cycles) of the positive samples of the corresponding group. Since most derangement algorithms are far from trivial, only a random rotation (shift of all list elements) is used.
-
-Together these two algorithms can create a complete test suite from a given set of DSL examples which can be used to verify the compilation results indenpendently of the regex dialect.
 
 \section{Inferring DSL Code from Examples} \label{sec:inferenceOfRexRegex}
 
@@ -400,7 +402,7 @@ Listing \ref{code:inferenceOfRexRegex} shows an example of RexRegex code alongsi
 
 \FloatBarrier
 
-\begin{inferedExample}[float=htb,title={Infered RexRegex Code from Examples},label=code:inferenceOfRexRegex]
+\begin{listingBox}[float=htb,title={Infered RexRegex Code from Examples},label=code:inferenceOfRexRegex]
     \begin{lstlisting}[basicstyle=\scriptsize,mathescape=true]
 Jan 12 06:26:19: ACCEPT service http from 119.63.193.196 to firewall(pub-nic), 
     prefix: "none" (in: eth0 119.63.193.196($\matchedSmall{\text{5c:0a:5b:63:4a:82}}$):4399 -> 
@@ -422,7 +424,7 @@ end
 DIGIT
 LETTER.EN
     \end{lstlisting}
-\end{inferedExample}
+\end{listingBox}
 
 It is important to note that the conversion from the generator to RexRegex is not lossless. The generator creates features that may not be supported by the language. The output from the example in listing \ref{code:inferenceOfRexRegex} contains lazy quantifiers which have been converted to greedy ones. In this case, this does not influence the semantics of the pattern but it may in other cases. This is unavoidable since while the feature is convenient for the user, it is not worth compromising on language principles for it.
 

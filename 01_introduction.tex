@@ -1,4 +1,11 @@
-\chapter{Introduction}
+\chapter{Introduction} \label{chapter:introtoall}
+
+\begin{quote}
+\emph{
+Some people, when confronted with a problem, think
+\enquote{I know, I'll use regular expressions.} Now they have two problems. -- Fredrik Lundh \cite{NowTwoProblems}
+    }
+\end{quote}
 
 Regular expressions are an integral part of modern software development but also exhibit serious flaws that make using them challenging and error-prone. This work presents RexRegex, a domain specific language that addresses these issues.
 
@@ -32,7 +39,30 @@ There are also external DSLs for regex but only few gained popularity. A project
 
 While there are many solutions available, none address the portability issue of regular expressions which is a primary focus of this work. It also tries to improve upon the appeal to non-programmers.
 
-\section{Notations}
+\section{Research Questions}
+
+This work tries to answer the following research questions:
+
+\newlist{RQs}{enumerate}{1}
+\setlist[RQs]{label=\textbf{RQ\arabic*:}}
+
+\newcommand*{\RQone}{What are the problems of regular expressions?}
+\newcommand*{\RQtwo}{What are the root causes?}
+\newcommand*{\RQthree}{How can the problems and their causes be quantified?}
+\newcommand*{\RQfour}{How can a DSL address the problems?}
+\newcommand*{\RQfive}{How can a DSL guarantee consistent semantics across different compilation targets?}
+\newcommand*{\RQsix}{How can DSL code be inferred from input examples?}
+
+\begin{itemize}
+    \item \textbf{RQ1:} \RQone
+    \item \textbf{RQ2:} \RQtwo
+    \item \textbf{RQ3:} \RQthree
+    \item \textbf{RQ4:} \RQfour
+    \item \textbf{RQ5:} \RQfive
+    \item \textbf{RQ6:} \RQsix
+\end{itemize}
+
+\section{Notation}
 
 This work uses the following conventions:
 
