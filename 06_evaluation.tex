@@ -20,11 +20,9 @@ RexRegex code is very readable. Its keywords and syntax algin with the English l
 
 The internal DSL allows a seamless integration into the host language which appeals to developers. It allows them to leverage IDE features for easy access to type information and documentation, while being more maintainable than regex. It strikes a good balance between readability and ease of use.
 
-The DSL can easily be expanded to compile to additional regex dialects. The test suite can be applied to the new compilation target with little overhead and guarantees that the DSL is consistent across languages. This represents a large step towards solving the portability problem and creating a \enquote{universal translator} for regex \cite{RegexNotLinguaFranca}.
+The DSL can easily be expanded to compile to additional regex dialects. The test suite can be applied to the new compilation target with little overhead and guarantees that the DSL is consistent across languages.
 
 The macro and extension system allow the language to grow in a maintainable fashion. It provides a way for the user base to expand the language in a scaleable way. The integration with the \textsc{utgast} framework makes it easy for contributors to ensure that the additions are well-tested and that every new extension is compatible with all compilation targets. Extensions allow the user to mold the DSL to their specific domain and create abstractions for a more declarative style and readability. There is a foreseeable future where matching an email would only be an import statement away, while the user can rest assured that the pattern was verified for the programming language they use. This scenario is a vast improvement over the current state of affairs where regular expressions are copied regularly from online sources with a significant likelihood that they may function differently than intended \cite{RegexNotLinguaFranca}.
-
-While the success of a language is multi-faceted, it is justified to say that RexRegex fulfills the necessary requirements: it \enquote{solve[s] a real problem in a clearly better way} \cite{OnSuccessfulLanuageDesignKernighan}.
 
 \section{Research Questions}
 

@@ -1,0 +1,11 @@
+
+\chapter{Conclusion}
+
+This work provides a detailed analysis of the current state of regular expressions, how they are used and what issues they have.
+
+It presents RexRegex, a domain specific language designed to address the problems and to create a good user experience for both programmers and non-programmers. It is extensible and allows the user to define their own abstractions. The novel testing framework \utgast{} ensures that the semantics of the language are consistent across compilation targets. This represents a large step towards solving the portability problem and creating a \enquote{universal translator} for regex \cite{RegexNotLinguaFranca}.
+
+The inference mechanism that generates RexRegex code from input examples, can assist the user when writing a new pattern. While helpful, it does not completely fit in with the rest of the language. As a genetic algorithm it is subject to variation and the conversion to DSL code can introduce changes in semantics and produce less readable code. A more interactive approach as in \cite{noxoneRegexGenerator} would be more beneficial to the language and may be the subject of further work.
+
+While the success of a language is multi-faceted, it is justified to say that RexRegex fulfills the necessary requirements \cite{OnSuccessfulLanuageDesignKernighan}: it \enquote{solve[s] a real problem in a clearly better way}.
+
