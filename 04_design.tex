@@ -24,31 +24,30 @@ While developers are the users to benefit the most from a regex DSL, they will a
 
 \subsection{Novices and Non-Programmers} \label{sec:demoNovice}
 
-A growing number of occupations -- from scientists to administrators -- are confronted with tasks that require large scale data processing. Because of this development so called low-code or no-code platforms that bridge the gap between programmers and non-programmer have gained significant traction in the last few years. They are designed to allow the average user access some features of programming languages without the need to learn one. A domain specific language for regular expressions would fit quite well in this space.
+A growing number of occupations -- from scientists to administrators -- are confronted with tasks that require large scale data processing. Because of this development so called low-code or no-code platforms that bridge the gap between programmers and non-programmer have gained significant traction in the last few years. They are designed to allow the average user access to some features of programming languages without the need to learn one. A domain specific language for regular expressions would fit quite well in this space.
 
-The applications of such a DSL are numerous. Spread sheets, managing emails, searching and updating text documents and dealing with a large number of files are just a few examples. Such a tool could save countless of hours wasted on tasks that a simple script or regex could solve within minutes. In order to appeal to them, the language should follow these principles:
+The applications of such a DSL are numerous. Spread sheets, managing emails, searching and updating text documents and dealing with a large number of files are just a few examples. Such a tool could save countless of hours wasted on tasks that a simple script or regex could solve within minutes. In order to appeal to non-programmers, the language should follow these principles:
 
 \begin{itemize}
     \item \textbf{Friendly aesthetics:}
-    Even high-level source code is intimidating to the average computer user. The DSL should follow the example of Python and imitate the English language as much as possible. It should also not assume that the user is familiar with concepts like functions, variables or scopes.
-    \item \textbf{Difficult to make mistakes:} 
-    Confronted with repeated failure, the user will blame themselves and feel helpless \cite{DesignOfEverydayThings}. To prevent this, the DSL should present itself as a \emph{pit of success} where it is easy to stumble across the right solution and hard to make mistakes \cite{PitOfSuccess}.
+    Even high-level source code is intimidating to the average computer user. The DSL should follow the example of Python and SQL and imitate the English language as much as possible. It should also not assume that the user is familiar with concepts like functions, variables or scopes.
+    \item \textbf{Foolproof:} 
+    Confronted with repeated failure, the user will blame themselves and feel helpless \cite{DesignOfEverydayThings}. To prevent this, the DSL should present itself as a \emph{pit of success} where it is easy to stumble across the right solution and hard to make mistakes~\cite{PitOfSuccess}.
     \item \textbf{Guidance:}
     Without programming experience, most users are also not familiar with navigating technical documentation and prefer a more guided environment. Code completion, DSL generators and automatically created input examples are all possible tools to assist the user.
 \end{itemize}
 
-This group is in many aspects the polar opposite of the group of developers. Sections \ref{sec:dslDesignPrinciples} will discuss how it is possible to unify these requirements and design a DSL for both groups.
+The two group are in many aspects polar opposites of each other. Sections \ref{sec:dslDesignPrinciples} will discuss how it is possible to unify these requirements and design a DSL for both groups.
 
 \section{Analysis of Regex Usage} \label{sec:analysisRegexUsage}
 
 To adequately address the issues of regex, it is not only important to understand how they work but also how they are used. This section will analyse the usage of regular expressions in real-world code bases. It is based on the regex polyglot corpus \cite{RegexNotLinguaFranca} which contains 537,806 patterns from 193,524 open source projects.
 
-The analysis was carried out by applying regular expressions to the regex patterns in the dataset and manually verifying the results. Special care went into covering the different dialects present in the dataset. Table \ref{tab:basicRegexFeatureUsage} shows the findings of the analysis. At a first look the figures align very well with the expectations experienced programmers would have for the popularity of regex features. 
+The analysis was carried out by applying regular expressions to the regex patterns in the dataset and manually verifying the results. Special care went into covering the different dialects present in the dataset. Tables \ref{tab:basicRegexFeatureUsage} and \ref{tab:advancedRegexFeatureUsage} show the findings of the analysis. At a first look the figures align well with the expectations experienced programmers would have for the popularity of regex features. 
 
 The start of input or line anchor \pattern{\caret} is one of the most commonly used features, occurring three times more often than its counterpart \pattern{\dollar}. Additionally, it can be noted that the dollar sign is mainly used to match the entire string \pattern{\caret\placeholder\dollar}.
 
 Repetition with \pattern{*} and \pattern{+} are very common, while all other types of quantifiers are rarely used -- including lazy quantifiers. Possessive quantifiers have been excluded from this analysis since most languages in the dataset do not support them. 
-
 
 \begin{newBoxTable}[float=t,title={Basic Regex Feature Usage},label=tab:basicRegexFeatureUsage,width=143mm]{X|l|r|r}
         Description & Pattern & Count  & \% \\ \mytoprule
@@ -75,7 +74,7 @@ Groups are also very common with the plain parentheses \pattern{(\placeholder)} 
 
 The more advanced features of regular expressions like look-arounds and unicode properties are -- as to be expected -- less frequently used. Only word boundaries which occur in $1.71$\% of samples, stand out which may be partially explained by their unique expressive power.
 
-\begin{newBoxTable}[float=t,title={Advanced Regex Feature Usage},label=label=tab:advancedRegexFeatureUsage,width=143mm]{X|l|r|r}
+\begin{newBoxTable}[float=t,title={Advanced Regex Feature Usage},label=tab:advancedRegexFeatureUsage,width=143mm]{X|l|r|r}
         Description & Pattern & Count  & \% \\ \mytoprule
         lazy repeat with star           & \keyword{p*?}            &  11,298 & 01.07  \\ \hline
         lazy repeat with plus           & \keyword{p+?}            &  13,412 & 01.27  \\ \hline
@@ -99,7 +98,7 @@ The more advanced features of regular expressions like look-arounds and unicode 
 
 This section will try to condense all the previously discussed user requirements and shortcomings of regular expressions into design principles that will form the throughline of the DSL.
 
-Instead of starting from scratch, these will be losely based on the Zen of Python (see figure \ref{fig:zenOfPython}) -- a secret design credo that is displayed when entering the command \code{import this} inside the Python shell \cite{ZenOfPython}.
+Instead of starting from scratch, these will be losely based on the Zen of Python (Listing \ref{fig:zenOfPython}) -- a secret design credo that is displayed when entering the command \code{import this} inside the Python shell \cite{ZenOfPython}.
 
 \begin{listingBox}[float=t!,title={The Zen of Python, by Tim Peters}, label=fig:zenOfPython]
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
@@ -127,11 +126,11 @@ Namespaces are one honking great idea - let's do more of those!
 
 \subsection{Two is better than One} \label{sec:twoIsBetter}
 
-When looking at the different requirements of programmers and non-programmers, it becomes obvious that some of them are mutually exclusive. The only obvious way to bridge this gap are compromises and trade-offs which would inevitably reduce the appeal to one of the demographics. This work will take another approach. Rather than choosing a one-size-fits-all solution, it introduces two different DSLs -- an internal and an external one -- that addresses the groups individually. By designing the architecture with this in mind, the two languages can complement each other.
+When looking at the different requirements of programmers and non-programmers, it becomes obvious that some of them are mutually exclusive. The only obvious way to bridge this gap are compromises and trade-offs which would inevitably reduce the appeal to one of the demographics. This work will take another approach. Rather than choosing a one-size-fits-all solution, it introduces two different DSLs -- an internal and an external one -- that address the groups individually. By designing the architecture with this in mind, the two languages can complement each other.
 
 \subsection{Verbose but Readable}
 
-The first seven lines of the Zen of Python (figure \ref{fig:zenOfPython}) emphasize that the language should be simple, readible and avoid density. The main goal of the domain specific language is to present the same concepts as regular expressions in a more explicit manner. This entails using keywords or function names instead of single characters. The non-programmer facing DSL will imitate the English syntax and air on the side of being too verbose. This will also be a useful exploration of the design space and may facilitate discussions on how much verbosity is too much.
+The first seven lines of the Zen of Python (Listing \ref{fig:zenOfPython}) emphasize that the language should be simple, readible and avoid density. The main goal of the domain specific language is to present the same concepts as regular expressions in a more explicit manner. This entails using keywords or function names instead of single characters. The non-programmer facing DSL will imitate the English syntax and air on the side of being too verbose. This will also be a useful exploration of the design space and may facilitate discussions on how much verbosity is too much.
 
 \subsection{Explicit over Implicit} \label{sec:explicitOverImplicit}
 
@@ -139,12 +138,11 @@ Depending on the specific regex dialect and the regex engine there is a lot of h
 
 This clearly introduces a lot of complexity and ambiguity into regular expressions. The DSL specification will only have one default behavior and the user has to explicitly choose the alternatives when needed. This must stay consistent across compilation targets and it may require to manually define character classes when shortcuts like \pattern{\bs s} diverge between dialects, which reduces the readability of the regex output but also addresses one of the major sources for errors \cite{RegexNotLinguaFranca}.
 
-\subsection{Declarative Abstractions over Procedural Control} \label{sec:declarativeOverImparative}
+\subsection{Declarative Abstractions over Imperative Control} \label{sec:declarativeOverImparative}
 
 Regular expressions give the user access to a lot of fine-tuning. With constructs like atomic groups, look-aheads and lazy quantifiers the user can influence the matching behavior of the regex engine significantly. This fine-grained control makes regex a powerful tool in the hands of experienced users but also causes mental overhead and readability problems. 
 
-While it is not the goal of this work to remove expressive power from regex, it may be a necessary trade-off to achieve a less complicated language interface. As a compromise, the decisions will be based on the analysis of regex usage in \ref{sec:analysisRegexUsage}
-and abstractions will be introduced that provide the same expressive power for more narrow use cases but hide the internal complexity from the user. These features can always be included in the programmer facing DSL later, if the need arises. This should allow both user groups to treat string processing like a declarative task of describing the input, instead of listing instructions to a regex engine.
+While it is not the goal of this work to remove expressive power from regex, it may be a necessary trade-off to achieve a less complicated language interface. As a compromise, the decisions will be based on the previous analysis of regex usage and abstractions will be introduced that provide the same expressive power for more narrow use cases but hide the internal complexity from the user. These features can always be included in the programmer facing DSL later, if the need arises. This should allow both user groups to treat string processing like a declarative task of describing the input, instead of listing instructions to a regex engine.
 
 \subsection{Consistency}
 
@@ -156,5 +154,5 @@ It is not feasible to compare compilation results for multiple targets with pred
 
 \subsection{Extensibility} \label{sec:extensibility}
 
-There will be use cases that could be easily solved by some advanced regex features and are not solvable in the DSL, which is frustrating for more experienced users. The easiest way to address this would be to simply allow users to insert raw regex inside the DSL via some escaping mechanism -- akin to inline assembly in the C language. While tempting, this solution stands in stark conflict with the design principle. A more elegant solution is to allow the user to extend the DSL. The user could not only integrate their knowledge of this particular regex feature into their work, they could also wrap it into an abstraction, improve the readability and even share it with others.
+There will be use cases that could be easily solved by some advanced regex features and are not solvable in the DSL, which is frustrating for more experienced users. The easiest way to address this would be to simply allow users to insert raw regex inside the DSL via some escaping mechanism -- akin to inline assembly in the C language. While tempting, this solution stands in stark conflict with the design principle. A more elegant solution is to allow the user to extend the DSL. The user could not only integrate their knowledge of this particular regex feature into their work, but create an abstraction that improves readability and can even be shared with others.
 
