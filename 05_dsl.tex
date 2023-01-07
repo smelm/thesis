@@ -106,7 +106,7 @@ maybe ...
 
 The user can repeat a subexpression three times with \code{3 of \expr} which produces \pattern{\placeholder\{3\}}. Ranges can be expressed with \code{1 to 3 of \expr} reusing the \code{to} keyword (see section \ref{sec:dslCharClasses}) for language coherence. Unlimited repetition is not expressed implicitly by omitting the upper bound \pattern{\placeholder\{1,\}} but by explicitly declaring it to be \code{1 to many of \expr}.
 
-\subsection{Kleene Star, Plus and Question Mark}
+\subsection{Shorthands}
 
 An expression can be marked as optional -- i.e. repeated zero or one time -- with \code{maybe \expr}, which was chosen over \code{optional \expr} because it is the simpler term in English. For a more natural flow, it was decided to introduce an exception and not write it as \code{maybe of \expr}.
 

@@ -79,7 +79,7 @@
 \newcommand*{\inp}[1]{\enquote{\regex{#1}}}
 \newcommand*{\code}[1]{\codeBox{\texttt{#1}}}
 \newcommand{\keyword}[1]{\texttt{#1}}
-\newcommand*{\matched}[1]{\matchedBox[yellow]{#1}}
+\newcommand*{\matched}[1]{\matchedBox[Gold1!80!white]{#1}}
 \newcommand*{\matchedSmall}[1]{\matchedBoxSmall[yellow]{#1}}
 
 \newcommand*{\bs}{\textbackslash}
@@ -107,18 +107,18 @@
     style=shared,
     morekeywords={as,or,of,to,}, 
     keywordstyle=\color{black}\bfseries,
-    identifierstyle={\color{Bittersweet}},
-    emph={any,define,either,many,same,begin,maybe,end},
+    identifierstyle={\color{MediumPurple4!80!black}},
+    emph={any,define,either,except,many,same,begin,maybe,end,named},
     emphstyle={\color{blue!80!black}\bfseries},
     morestring={[b]"},
-    stringstyle=\color{red},
+    stringstyle=\color{Firebrick3!90!white}, % LightPink2!70!black
 }
 
 \lstnewenvironment{rexregex}[1][]{\lstset{language=rexregex,style=rexregex,#1}}{}
 
 \newcommand*{\ws}{\char32}
 
-\newtcolorbox[blend into=figures]{boxFigure}[1][]{float=htb, halign=center,  every float=\centering, #1, colback=white, colframe=green!70!black}
+\newtcolorbox[blend into=figures]{boxFigure}[1][]{float=htb, halign=center,  every float=\centering, #1, colback=white, colframe=Green3!90!black}
         
 
 \tcbset{myTabStyle/.style={
@@ -156,14 +156,14 @@
             escapechar={\%},
         },
         #1,
-        colback=cyan!5!white,
+        colback=cyan!20!white,
         borderline west={0.5mm}{17pt}{blue!90!white},
     }
 
     \newtcblisting[blend into=listings]{pseudoCode}[1][]{% 
         lstBox,
         #1,
-        colback=cyan!5!white,
+        colback=cyan!20!white,
         borderline west={0.5mm}{17pt}{blue!90!white},
         listing options = { 
             mathescape=true,
@@ -183,7 +183,7 @@
     \newtcolorbox[blend into=listings]{listingBox}[1][]{% 
         lstBox,
         #1,
-        colback=cyan!5!white,
+        colback=cyan!20!white,
         listing options = { 
         style=shared,
         mathescape=true },

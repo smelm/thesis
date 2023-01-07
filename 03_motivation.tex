@@ -1,6 +1,6 @@
-\chapter{Issues of Regular Expressions} \label{chapter:motivation}
+\chapter{Background: Problems of Regular Expressions} \label{chapter:motivation}
 
-Regex are a powerful and widely used tool for string processing. Estimates show that a third of Javascript and Python projects make use of them in some capacity \cite{RedosInPractice}. 88\% of surveyed programmers state that regex are a valuable tool \cite{RegexesAreHard}. Yet they also come with significant drawbacks that cause some developers to refrain from using them altogether or to copy them from the internet whole-cloth (see fig \ref{fig:regexReuse}) \cite{RegexesAreHard}. This chapter will analyse the reasons that cause these issues.
+Regex are a powerful and widely used tool for string processing. Estimates show that a third of Javascript and Python projects make use of them in some capacity \cite{RedosInPractice}. 88\% of surveyed programmers state that regex are a valuable tool \cite{RegexesAreHard}. Yet they also come with significant drawbacks that cause some developers to refrain from using them altogether or to copy them from the internet whole-cloth (Figure \ref{fig:regexReuse}) \cite{RegexesAreHard}. This chapter will analyse the reasons that cause these issues.
 
 {
 \hypersetup{citecolor=white}
@@ -17,7 +17,7 @@ Regex are a powerful and widely used tool for string processing. Estimates show 
           xtick={0,10,...,100},
             xmin=0, xmax=100
           ]
-         \addplot[fill=green!80!white] coordinates {
+         \addplot[fill=Green3] coordinates {
               (3.33,100\%) 
               (20,About 75\%) 
               (28.33,About 50\%) 
@@ -32,7 +32,7 @@ Regex are a powerful and widely used tool for string processing. Estimates show 
 
 \section{Readability}
 
-It is easy to dismiss the criticism that regex are hard to read as trivial, but in doing so, one also ignores the root cause for most of the problems they have. Their cryptic nature is not only the main contributor to errors but also the main reason why developers refrain from using regex. The following excerpt from a Vice article discussing Perl is a good representation of how regular expressions are perceived \cite{ViceProgrammingLanguagesProgrammersHate}:
+It is easy to dismiss the criticism that regex are hard to read as trivial, but in doing so, one also ignores the root cause for most of the problems they have. Their cryptic nature is not only the main contributor to errors but also the reason why some developers refrain from using regex. The following excerpt from a Vice article discussing Perl is a good representation of how regular expressions are perceived \cite{ViceProgrammingLanguagesProgrammersHate}:
 
 {\small
 \begin{quote}
@@ -52,14 +52,14 @@ sub deleteDoubleDots($) {
 
 }
 
-This perception is by no means unique to the author of the article. 65\% of programmers state that they found regular expressions daunting when they first learned to code \cite{RegexesAreHard}. Part of this reaction may be caused by their complexity but most stems from the far simpler issue that they \textquote{look a lot like Brainfuck} \cite{ViceProgrammingLanguagesProgrammersHate}. The main reason for this  -- not unfounded (see listing \ref{fig:regexVsBrainfuck}) -- comparison to the infamous, esoteric programming language is the frequency of special characters which makes regex look noisy.
+This perception is by no means unique to the author of the article. 65\% of programmers state that they found regular expressions daunting when they first learned to code \cite{RegexesAreHard}. Part of this reaction may be caused by their complexity but most stems from the far simpler issue that they \textquote{look[] a lot like Brainfuck} \cite{ViceProgrammingLanguagesProgrammersHate}. The main reason for this  -- not unfounded (Listing \ref{fig:regexVsBrainfuck}) -- comparison to the infamous, esoteric programming language is the frequency of special characters which makes regex look noisy.
 
 
 {
 \hypersetup{citecolor=white}
 \begin{listingBox}[title={Comparison of Regex \cite{regexWithComments} and Brainfuck \cite{brainfuckExample}},label=fig:regexVsBrainfuck,width=15.7cm,center]
-    \textbf{Brainfuck}
-
+\begin{flushleft} \textbf{Brainfuck} \end{flushleft}
+\vspace{-1em}
 \begin{lstlisting}[basicstyle=\ttfamily]
 >> [>>] >> [>>]<  move to data cell
 [>+>>+<<<-]>      make double copy and move to first
@@ -67,8 +67,8 @@ This perception is by no means unique to the author of the article. 65\% of prog
                       and set flag
 >>                go to flag cell (0 or 1)
 \end{lstlisting}
-
-\textbf{Regex with the verbose flag}
+\tcblower
+\textbf{Regex with enabled comments}
     \begin{lstlisting}[basicstyle=\ttfamily,mathescape=true]
 ([a-z0-9_\.-]+)  # local Part
 @                # single @ sign
@@ -80,30 +80,29 @@ This perception is by no means unique to the author of the article. 65\% of prog
 }
 
 
-An analysis of the 537,806 patterns from the polyglot regex corpus \cite{RegexNotLinguaFranca} shows that regular expressions contain more special characters than normal letters (see table \ref{tab:regexCharDist}). While programmers are used to a certain amount of special characters, this is a lot more than any codebase would have. For a comparison, of the $1.851.901$ characters of the gnu-core-utils codebase \cite{GnuCoreUtils} only about 20\% are special characters while 78\% are normal letters. This imbalance is not helped by the fact that, by default, regular expressions do not allow whitespaces. It comes as no suprise that 70\% of surveyed developers find regular expressions to be less readable than normal code \cite{RegexesAreHard}.
+An analysis of the 537,806 patterns from the polyglot regex corpus \cite{RegexNotLinguaFranca} shows that regular expressions contain more special characters than normal letters (Table \ref{tab:regexCharDist}). While programmers are used to a certain amount of special characters, this is a lot more than any codebase would have. For comparison, of the $1.851.901$ characters of the gnu-core-utils codebase \cite{GnuCoreUtils} only about 20\% are special characters while 78\% are normal letters. This imbalance is not helped by the fact that, by default, regular expressions do not allow whitespaces. It comes as no suprise that 70\% of surveyed developers find regular expressions to be less readable than normal code \cite{RegexesAreHard}.
 
-\begin{newBoxTable}[title={Character Distribution in Regex},label=tab:regexCharDist,width=11cm,center]{X|r|r|r}
+\begin{newBoxTable}[title={Character Distribution in Regex},label=tab:regexCharDist,width=11.5cm,center]{X|r|r|r}
         Character Type & Count  & \% & Mean per Pattern \\ \mytoprule
         Letters   & 8,432,429  & 42.66  & 7.97  \\ \hline
         Digits    & 1,038,590  &  5.25  & 0.98  \\ \hline
         Special Characters  & 10,296,257 & 52.09  & 9.73 \\ \hline
 \end{newBoxTable}
 
-One consequence of the high rate of special characters is that about 30\% ($317,904$) of all regexes contain escaping backslashes. This issue is well-known in the Perl community and referred to as \emph{leaning toothpick syndrome} \cite{LeaningToothpick}. 
+One consequence of the high rate of special characters is that about 30\% ($317,904$) of all regex patterns contain escaping backslashes. This issue is well-known in the Perl community and referred to as \emph{leaning toothpick syndrome} \cite{LeaningToothpick}. 
 The problem is worsened when the programming language requires backslashes in strings to be escaped themselves. In that situation, every single backslash is part of a special character in the host language like \code{"\bs n"} while double backslashes are part of the pattern \code{"\bs\bs w"}.
 
 The syntax of regular expressions is well-suited to express concepts in the fewest characters possible but this comes with the drawback of visual noise which puts a mental burden on the reader and hides errors. It gives regex the reputation of a \enquote{write-only language} that can be understood while writing an expression but can hardly be deciphered later \cite{WriteOnlyLanguage}.
-
 
 \section{Understandability}
 
 Even when the user is able to parse the visual noise, there are still more hurdles in front of them. When the user sees a special character, correctly identifies it as unescaped and assigns it the corresponding meaning, they still cannot be completely sure if their assessment is correct. Special characters are ambiguous and their meaning is highly context-dependent which makes reading regular expressions not just hard on the eyes but on the brain as well.
 
-For illustration let us consider the question mark \pattern{?}. Table \ref{tab:questionMark} shows seven different contexts in which the question mark means different things creating 14 different constructs in total. When a user sees a question mark they have to immediately assess the surrounding characters to find its current meaning. Does it represent itself or the optional quantifier? Does it modify a quantifier or a group? Or is it part of a look-around? 
+For illustration, Table \ref{tab:questionMark} shows seven different contexts in which the question mark \pattern{?} means different things creating 14 different constructs in total. When a user sees a question mark they have to immediately assess the surrounding characters to find its current meaning. Does it represent itself or the optional quantifier? Does it modify a quantifier or a group? Or is it part of a look-around? 
 
 This is no exception and applies to most special characters. The user must remember a list of rules for each special character and decide based on the surroundings which concept it represents and whether it is currently escaped. This is inherent to the compact nature of regular expressions. There are only a limited number of useable symbols and to achieve its compactness it needs to leverage not just them but also their combinations. \\
 
-Another problem stems from the fact that how regular expressions look differs from how they work. It is easy for a user to assume that regex are a description of how the matching input looks like. Most expressions look like the expected matching input string with some parts replaced by special patterns. The pattern \pattern{".*"} from figure \ref{fig:regexSurroundingTooGreedy} seems like a correct regular expression because it has the same shape as the expected input string. The user is tempted to believe that regular expressions are a declarative language, while it is actually procedural. 
+Another problem stems from the fact that the look of regular expressions differs from how they work. It is easy for a user to assume that regex are a description of how the matching input looks like. Most expressions look like the expected matching input string with some parts replaced by special patterns. The pattern \pattern{".*"} (Figure \ref{fig:regexSurroundingTooGreedy}) seems like a correct regular expression because it has the same shape as the expected input string. The user is tempted to believe that regular expressions are a declarative language, while they are actually imperative. 
 
 \begin{newBoxTable}[title={Ambiguity of the Question Mark Character},label=tab:questionMark,width=12cm,center]{X|X}
     Pattern & Meaning \\ \mytoprule
@@ -119,23 +118,23 @@ Another problem stems from the fact that how regular expressions look differs fr
     \regex{(?>a+)} & atomic group \\ 
 \end{newBoxTable}
 
-In order to write correct patterns the user has to rid themselves from the notion that they describe \emph{what the input is} and think of them as sequential instructions that tell the engine \emph{how to match it}. They also have to visualize the internal state of the regex engine, otherwise they may be surprised by some of the backtracking behavior. Regex always have been intended to describe inherently procedural finite state machines but the optimization for notational convenience has given them a declarative appearance.
+In order to write correct patterns the user has to rid themselves from the notion that they describe \emph{what the input is} and think of them as sequential instructions that tell the engine \emph{how to match it}. They also have to visualize the internal state of the regex engine, otherwise they may be surprised by some of the backtracking behavior. Regex always have been intended to describe inherently imperative finite state machines but the optimization for notational convenience has given them a declarative appearance.
 
 \section{Prone to Errors}
 
-The issues listed above make crafting regular expressions especially error-prone. This section will give a few examples of common mistakes regex users of any experience level make. A study of 356 regex-related pull requests from 135 GitHub repositories belonging among others to Mozilla, Google, Facebook and Apache \cite{DemystifyingRegexBugs} found that regex related pull requests take longer to be merged and require more lines of code than average.
+The issues listed above make crafting regular expressions especially error-prone. This section will give a few examples of common mistakes regex users of any experience level make. A study of 356 regex-related pull requests from 135 GitHub repositories belonging among others to Mozilla, Google, Facebook and Apache found that regex related pull requests take longer to be merged and require more lines of code than average \cite{DemystifyingRegexBugs}.
 
-\subsection{Escaping}
+\subsubsection{Escaping}
 
 The largest contributor to regex-based programming errors is the escaping of special characters. To find and avoid these mistakes the user has to know about all special characters, even the once they do not intend to use. Additionally, they must also be aware of the particular regex dialect since special characters strongly differ between them. It is also dependent on the location within the pattern since character classes automatically escape most special characters while simultaneously introducing new ones that need to be escaped instead. About 10\% of regular expression problems stem from wrong escaping \cite{DemystifyingRegexBugs}. 
 
-\subsection{Character Classes}
+\subsubsection{Character Classes}
 
-Character classes are a useful and frequently used feature of regular expressions (see section \ref{sec:analysisRegexUsage}). The usage of the square brackets is reminiscent of lists in most modern programming languages which is a useful association but it can also tempt novice or absent-minded users into using a separator symbol between the single elements. This can be seen in patterns like \pattern{[0,2,3,5-9]} \cite{RegexErrorNlpChinaCharClassSep} or \pattern{[3|4|5|7|8]} \cite{RegexErrorRoncooCharClassSep} which unintentionally introduce an additional comma or pipe character into the character class. It is also important to note that most regex engines do not report a warning in these cases since duplicates in character classes are just silently removed.
+Character classes are a useful and frequently used feature of regular expressions (Table \ref{tab:basicRegexFeatureUsage}). The usage of the square brackets is reminiscent of lists in most modern programming languages which is a useful association but it can also tempt novice or absent-minded users into using a separator symbol between the single elements. This can be seen in patterns like \pattern{[0,2,3,5-9]} \cite{RegexErrorNlpChinaCharClassSep} or \pattern{[3|4|5|7|8]} \cite{RegexErrorRoncooCharClassSep} which unintentionally introduce an additional comma or pipe character into the character class. It is also important to note that most regex engines do not report a warning in these cases since duplicates in character classes are just silently removed.
 
-\subsection{Character Ranges}
+\subsubsection{Character Ranges}
 
-Without character ranges regex would be nearly unusable but they can be deceptive. Section \ref{sec:introAltAndCharClasses} mentions that the range \pattern{[A-z]} includes more characters than just the alphabet. Unsurprisingly this error occurs in open source codebases in different variations \cite{RegexErrorCamelLetterRange}\cite{RegexErrorApacheGeodeLetterRange}\cite{RegexErrorElasticSearchLetterRange} but is far from the only problem with character ranges.
+Without character ranges regex would be nearly unusable but they can be deceptive. The range \pattern{[A-z]} includes more characters than just the alphabet. Unsurprisingly this error occurs in open source codebases in different variations \cite{RegexErrorCamelLetterRange}\cite{RegexErrorApacheGeodeLetterRange}\cite{RegexErrorElasticSearchLetterRange} but is far from the only problem with character ranges.
 
 There is an inherent disconnect between the human understanding of symbols and characters and their arrangement on the unicode table. There are plenty of character classes that contain ranges like \pattern{[\%-.]} \cite{RegexErrorJenkinsSpecialRange} and \pattern{[;-\_]} \cite{RegexErrorQuizconnectSpecialRange} that both intend to match three characters but instead match 10 and 37 respectively.
 

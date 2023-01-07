@@ -1,7 +1,7 @@
 
 \chapter{Background: Regular Expressions} \label{chapter:intro}
 
-Regular expressions or regex are an important tool in modern software development. They can be found in a wide variety of applications -- from small scripts to large scale software -- and are used for input validation as well as text processing. They are invaluable for modern software development but also exhibit various short-comings and issues. This chapter provides a short introduction to regular expressions. For an in-depth explanation \enquote{Mastering Regular Expressions} by Jeffrey Friedl is recommended \cite{MasteringRegex}.
+Regular expressions or regex are an important tool in modern software development. They can be found in a wide variety of applications -- from small scripts to large scale software -- and are used for input validation as well as text processing. This chapter provides a short introduction to regular expressions. For an in-depth explanation \enquote{Mastering Regular Expressions} by Jeffrey Friedl is recommended \cite{MasteringRegex}.
 
 \section{In Automata Theory} \label{sec:regexInAutomata}
 
@@ -13,9 +13,9 @@ An automaton is a mathematical construction that sequentially consumes an input,
 L(A) \coloneqq \{ A(w)\text{ is accepting} \mid w \in \Sigma \}
 \end{equation*}
 
-The automatons that accept regular languages are called finite state machines. They have a finite set of possible states, which they can change based on the current state and input symbol. This is very restrictive and the reason they cannot recognize languages like $a^nba^n$. Regular languages are the lowest type in the Chomsky hierarchy of grammars \cite{ChomskyCertainFormalPropertiesGrammars}. 
+The automatons that accept regular languages are called finite state machines. They have a finite set of possible states, which they can change based on the current state and input symbol. This is very restrictive and the reason they cannot recognize languages like $a^nba^n$. Regular languages are the lowest type of grammar in the Chomsky hierarchy of grammars \cite{ChomskyCertainFormalPropertiesGrammars}. 
 
-In automata theory regular expressions are simply a notation tool that simplifies the definition of regular languages. It can be proven that they posess the same expressive power as a finite state machine \cite{AutomataTheoryLanguagesAndComputation}. Regular expressions are defined as any expression that is \cite[p.~46]{TheoryOfComputation}:
+In automata theory regular expressions are simply a notational tool that simplifies the definition of regular languages. It can be proven that they posess the same expressive power as finite state machines \cite{AutomataTheoryLanguagesAndComputation}. Regular expressions are defined as any expression that is \cite[p.~46]{TheoryOfComputation}:
 
 \begin{enumerate}
     \item $a \in \Sigma$, a symbol in the alphabet. \label{defRegexSymbol}
@@ -23,7 +23,7 @@ In automata theory regular expressions are simply a notation tool that simplifie
     \item $\emptyset$, the empty language. \label{defRegexEmptyLang}
     \item $R_1 \cup R_2$, the union of two regular expressions. \label{defRegexUnion}
     \item $R_1 \circ R_2$, the concatenation of two regular expressions which consists of any element from the first expression, followed by any element of the second. \label{defRegexConcat}
-    \item $R_1^*$, the Kleene star operator which concatenates every element with itself any number of times -- including zero times. \label{defRegexKleene}
+    \item $R_1^* = \{ \epsilon,\ R_1,\ R_1 \circ R_1,\ R_1 \circ R_1 \circ R_1,\  ... \}$, the Kleene star operator.\label{defRegexKleene}
 \end{enumerate}
 
 Following this definition, the language that accepts any word containing the letter \emph{a} two times can be constructed as shown in figure \ref{fix:regularExpressionMatching2As}.
@@ -32,7 +32,7 @@ Following this definition, the language that accepts any word containing the let
     \hspace{-5mm}$\Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*$
 \end{listingBox}
 
-Regular expressions do not express a different concept than finite state machines but rather allow for the same idea to be expressed in a compact manner. This is similar to their counterparts in programming.
+Regular expressions do not express a different concept than finite state machines but rather allow for the same idea to be expressed in a more compact manner. This is similar to their counterparts in programming.
 
 \section{In Programming}
 
@@ -47,11 +47,11 @@ The most basic building block for string manipulation is working with the indivi
 
 \subsubsection{Literal Characters and Escaping}
 
-Most characters in regular expressions are represented by themselves. The pattern \pattern{a} for instance matches the literal character \inp{a}. There are however characters with special meanings like \pattern{.+*?\dollar\caret\bs(){}[]} which will be discussed later in this section. For now, it is important to note that these special characters need to be escaped with the backslash \pattern{\bs} to be matched literally. The regex \pattern{\bs.} matches the literal dot \inp{.} and \pattern{\bs\bs} the backslash \inp{\bs}.
+Most characters in regular expressions are represented by themselves. The pattern \pattern{a} for instance matches the literal character \inp{a}. There are however characters with special meanings like \pattern{.+*?\dollar\caret\bs(){}[]} which will be discussed later in this chapter. For now, it is important to note that these special characters need to be escaped with the backslash \pattern{\bs} to be matched literally. The regex \pattern{\bs.} matches the literal dot \inp{.} and \pattern{\bs\bs} the backslash \inp{\bs}.
 
-In contrast to mathematics there is no need for a concatenation operator (\ref{defRegexConcat}). Any two regular expressions that occur after one another are automatically concatenated. This means that any string consisting of non-special ASCII letters and numbers is also a regex that will match itself, e.g. \pattern{hello123} will match any input that contains \inp{hello123}.
+In contrast to mathematics, there is no need for a concatenation operator (\ref{defRegexConcat}). Any two regular expressions that occur after one another are automatically concatenated. This means that any string consisting of non-special letters and numbers is also a regex that will match itself, e.g. \pattern{hello123} will match any input that contains \inp{hello123}.
 
-In the mathematical model the underlying alphabet $\Sigma$ explicitly defines what symbols can occur in the language. For regex this is only implicitly defined by the character encoding the regex engine expects. When using ASCII-encoded strings the alphabet consists of 95 characters \cite[p.~211~ff]{CodedCharacterSets} and of $149,186$ when using unicode \cite{UnicodeStandard15}. 
+In the mathematical model the underlying alphabet $\Sigma$ explicitly defines what symbols can occur in the language. For regex this is only implicitly defined by the character encoding expected by the regex engine. When using ASCII-encoded strings the alphabet consists of 95 characters \cite[p.~211~ff]{CodedCharacterSets} and of $149,186$ when using unicode \cite{UnicodeStandard15}. 
 
 \subsubsection{Alternatives and Character Classes} \label{sec:introAltAndCharClasses}
 
@@ -61,11 +61,11 @@ The most generic way of achieving this is the alternative operator \pattern{\emp
 
 When multiple single characters are intended to be matched, it can conveniently be achieved with character classes which allow the user to list all characters that are supposed to be matched in square brackets. For example, any vowel would be matched by \pattern{[aeiou]}. 
 
-It is also possible to include ranges of characters with a beginning and end character separated by a minus character which add everything in between to the character class. Any lower case character of the English alphabet can be matched by \pattern{[a-z]}.
+It is also possible to include ranges of characters with a beginning and end character separated by a dash which add everything in between to the character class. Any lower case character of the English alphabet can be matched by \pattern{[a-z]}.
 
 Character classes can also be negated and only match characters that are not a member. This is expressed by a caret sign in the first position of the square brackets. A character that is not a number can therefore be matched by \pattern{[\caret 0-9]}.
 
-Most special characters are automatically escaped in character classes. Some exceptions are the backslash, character sign and the square brackets which can be escaped with the backslash. The minus character is also escaped when it is in the first position, since it cannot be within a character range there. When the caret is used on any but the first position it is escaped as well. This means that to match a character that is neither a lowercase letter, the minus sign, caret nor the backslash the regex \pattern{[\caret-a-z\caret\bs\bs]} can be used.
+Most special characters are automatically escaped in character classes. Some exceptions are the backslash, dash and square bracket characters which can be escaped with the backslash. The dash character is also escaped when it is in the first position, since it cannot be within a character range there, while the caret is escaped anywhere but the first position. This means that to match a character that is neither a lowercase letter, the dash, caret or the backslash the regex \pattern{[\caret-a-z\caret\bs\bs]} can be used.
 
 \subsubsection{Predefined Character Classes}
 
@@ -73,51 +73,53 @@ Most regex dialects offer predefined shorthand notations for the most common cha
 
 Digits can be matched with the predefined digit class \pattern{\bs d} instead of the range \pattern{[0-9]}. The class \pattern{\bs w} is called the word class and matches the characters that can occur in identifiers of the host language which usually includes letters, numbers and the underscore. To match just the English letters, the explicit range \pattern{[a-zA-Z]} must be used. It is important to note that \pattern{A-z} does not work for matching letters, since it also matches the six characters between \inp{Z} and \inp{a} on the ASCII table which is equivalent to \pattern{[A-Za-z[\\]\caret\_`]}.
 
-To match whitespaces \pattern{\bs s} can also be used. What qualifies as whitespace in addition to the ASCII space \inp{ } depends on the particular dialect. This class may also include horizontal and vertical tabs.
+To match whitespaces \pattern{\bs s} can be used. What qualifies as whitespace in addition to the ASCII space \inp{ } depends on the particular dialect. This class may also include horizontal and vertical tabs.
 
 Predefined character classes can also be part of user defined ones like \pattern{[A-Za-z\bs d]}. For convenience predefined character class can be negated by writing them in upper case. The class \pattern{\bs D} for example matches all non-digits and is equivalent to \pattern{[\caret \bs d]}.
 
 \subsection{Quantifiers} \label{sec:introQuantifiers}
 
-It is not only necessary to define which characters can occur but also how often they do so. For this, regular expressions offer a wide variety of quantifiers that allow repeating other patterns which are appended as a suffix to the pattern they repeat.
+It is not only necessary to define which characters can occur but also how often they do so. For this, regular expressions offer a wide variety of quantifiers that allow repeating other patterns which they are appended to as a suffix.
 
-The simplest of the quantifiers is the question mark \pattern{\placeholder?} that marks the pattern as optional. For example: a phone number with a two digit area code and four digit number that may be separated by a slash like \inp{123456} or \inp{12/3456} can be matched with \pattern{\bs d\bs d/?\bs d\bs d\bs d\bs d}.
+The simplest of the quantifiers is the question mark \pattern{\placeholder?} that marks the pattern as optional. For example: a phone number with a two digit area code and a four digit number that may be separated by a slash like \inp{123456} or \inp{12/3456} can be matched with \pattern{\bs d\bs d/?\bs d\bs d\bs d\bs d}.
 
 To simplify the phone number pattern above, the digit class \pattern{\bs d} can be repeated $n$ times by appending $n$ in curly braces to it. This results in the much more readable \pattern{\bs d\{2\}/?\bs d\{4\}}. If the phone number could be four to six digits long, instead of just four, the repetition could be expressed with a comma-separated range \pattern{\bs d\{2\}/?\bs d\{4,6\}}. 
 
-When the pattern can occur an unlimited amount of times the upper bound of the range can be omitted. A password that must be at least six arbitrary characters long but can be as long as desired, can be verified with \pattern{.\{6,\}}. For the two most common cases there are shorthand notations. The plus sign \pattern{\placeholder+} signifies that the pattern is not limited in the number of times it can occur but must occur at least once, just like \pattern{\placeholder\{1,\}} does. When the pattern may also occur zero times, it can be written instead as \pattern{\placeholder*} which corresponds to the Kleene star (\ref{defRegexKleene}).
+When the pattern can occur an unlimited amount of times the upper bound of the range can be omitted. A password that must be at least six arbitrary characters long but can be as long as desired, can be verified with \pattern{.\{6,\}}. 
 
-All quantifiers are \emph{greedy} by default which means that the engine will first try to match the most characters possible with them. The regex \pattern{\bs w+\_\_} applied to \inp{abc\_\_} will first try to match the entire input with \pattern{\bs w+} since it is greedy and the word class also matches the underscore. While doing so the regex engine keeps track of so called save points which are all the positions in which a different decision could be made. Once it reaches the end of the input and the match fails because it still needs to match the two underscores it moves back to the last save state. In this state it matched everything but the last character with \pattern{\bs w+} and can only match one underscore from there. It then returns to the next save state in which both underscores are still unmatched and the rest of the pattern matches successfully. This process is called \emph{backtracking}. 
+For the two most common cases there are shorthand notations. The plus sign \pattern{\placeholder+} signifies that the pattern is not limited in the number of times it can occur but must occur at least once, just like \pattern{\placeholder\{1,\}} does. When the pattern may also occur zero times, it can be written as \pattern{\placeholder*} which corresponds to the Kleene star (\ref{defRegexKleene}).
+
+All quantifiers are \emph{greedy} by default which means that the engine will first try to match the most characters possible with them. The regex \pattern{\bs w+\_\_} applied to \inp{abc\_\_} will first try to match the entire input with \pattern{\bs w+} since it is greedy and the word class also matches the underscores. While doing so the regex engine keeps track of so called \emph{saved states} which are all the positions in which a different decision could be made. Once it reaches the end of the input and the match fails because it still needs to match the two underscores it moves back to the last saved state. In this state it matched everything but the last character with \pattern{\bs w+} and can only match one underscore from there. It then returns to the next save state in which both underscores are still unmatched and the rest of the pattern matches successfully. This process is called \emph{backtracking}. 
 
 
-There are situations where greedy quantifiers match too much. If the user wanted to match something in quotes, they may try the pattern \pattern{".*"} which works for simple cases but runs into problems with some inputs (see figure \ref{fig:regexSurroundingTooGreedy}). As indicated, the regex engine matches the entire input which is not the intended outcome. This happens because the regex engine matches the entire input with \pattern{.*} first and then backtracks one step to match the quote.
+There are situations where greedy quantifiers match too much. If the user wanted to match something in quotes, they may try the pattern \pattern{".*"} which works for simple cases but runs into problems with some inputs (Listing \ref{fig:regexSurroundingTooGreedy}). As indicated, the regex engine matches the entire input which is not the intended outcome. This happens because the regex engine matches the entire input with \pattern{.*} first and then backtracks one step to match the quote.
 
 \begin{listingBox}[title={Too greedy quantifier \pattern{".*"}},label=fig:regexSurroundingTooGreedy,width=12cm,center]
     \hspace{-5mm}\matched{"I~love~cake,"~Robert~said,~"nearly~as~much~as~I~love~steak."}
 \end{listingBox}
 
-There are a few different possibilities to avoid this. One would be to replace the \pattern{.} with \pattern{[\caret "]} which matches anything but quotes. When this is not feasible -- which may be the case in more complex patterns -- a lazy quantifier \pattern{".*?"} can be used (see figure \ref{fig:regexSurroundingCorrectLazy}). 
+There are a few different possibilities to avoid this. One would be to replace \pattern{.} with \pattern{[\caret "]} which matches anything but quotes. When this is not feasible -- which may be the case in more complex patterns -- a lazy quantifier \pattern{".*?"} can be used (Listing \ref{fig:regexSurroundingCorrectLazy}). 
 
 
 \begin{listingBox}[title={Correct use of lazy quantifier \pattern{".*?"}},label=fig:regexSurroundingCorrectLazy,width=12cm,center]
     \hspace{-5mm}\matched{"I~love~cake,"}~Robert~said,~"nearly~as~much~as~I~love~steak."
 \end{listingBox}
 
-Lazy quantifiers are identical to their greedy counterpart, but they try to match as few character as possible. After every matched character\footnote{Or after matching no character in the case of \pattern{??}, \pattern{*?} or \pattern{\{0,n\}?}.} a save state is created and the engine moves on to the next subpattern. Only when the match fails, the engine returns to the save state and matches one more character. Any greedy quantifier has a lazy counterpart marked by appending a question mark, which are \pattern{??}, \pattern{*?}, \pattern{+?} and \pattern{\{n,m\}?}.
+Lazy quantifiers are identical to their greedy counterparts, but they try to match as few characters as possible. After every matched character\footnote{Or after matching no character in the case of \pattern{??}, \pattern{*?} or \pattern{\{0,n\}?}.} a saved state is created and the engine moves on to the next subpattern. Only when the match fails, the engine returns to the saved state and matches one more character. Any greedy quantifier has a lazy counterpart marked by appending a question mark, which are \pattern{??}, \pattern{*?}, \pattern{+?}, \pattern{\{n\}?} and \pattern{\{n,m\}?}.
 
 \subsection{Anchors} \label{sec:introAnchors}
 
-By default, regex find the first substring of the input that matches the pattern but also provide a mechanism to anchor the expression to the start or end of the input. The caret symbol \pattern{\caret} and dollar sign \pattern{\dollar} represent the start and end of the input respectively. The regex \pattern{\caret Dear Bob} could be used to search all emails addressed to Bob while \pattern{Sincerely Alice\dollar} would find the sender at the end. When a user wants to match the entire input with a pattern, it can be achieved by surrounding it with anchors \pattern{\caret\placeholder\dollar}. This is especially useful for validating input.
+By default, regex find the first substring of the input that matches the pattern but also provide a mechanism to anchor the expression to the start or end of the input. The caret symbol \pattern{\caret} and dollar sign \pattern{\dollar} represent the start and end of the input respectively. The regex \pattern{\caret Dear Bob} could be used to search all emails addressed to Bob while \pattern{Sincerely Alice\dollar} would find the sender at the end. When a user wants to match the entire input with a pattern, it can be achieved by surrounding it with anchors \pattern{\caret\placeholder\dollar}. This is especially useful for input validation.
 
-When the so called multiline option is set,\footnote{This may be the default setting depending on the regex engine.} these anchors match the beginnings and ends of lines instead. This ambiguity stems from the early years of regular expressions where they were mostly used in command line tools that processed text on a line-by-line basis. Lines are defined as following or preceding newline characters. What qualifies as a newline character is up to the interpretation of the particular regex dialect since unicode contains over a dozen characters that could be included. Some dialects also define anchors that only match the beginning or end of the input. In the \textsc{pcre} standard these can be used as \pattern{\bs A} and \pattern{\bs Z}.
+When the so called multiline option is set,\footnote{This may be the default setting depending on the regex engine.} these anchors match the beginnings and ends of lines instead. This ambiguity stems from the early years of regular expressions when they were mostly used in command line tools that processed text on a line-by-line basis. Lines are defined as following or preceding newline characters. What qualifies as a newline character is up to the interpretation of the particular regex dialect since unicode contains over a dozen characters that could be included. Some dialects also define anchors that only match the beginning or end of the input. In the \textsc{pcre} standard these can be used as \pattern{\bs A} and \pattern{\bs Z}.
 
 \subsection{Groups} \label{sec:introGroups}
 
 Some patterns would be impossible to express without the ability to group sequences of patterns together. The pattern \pattern{hello?~world} does not match \inp{world} with an optional \inp{hello} but rather only the variant \inp{hell world}. To correctly express what they want, the user can wrap the subpattern in parentheses \pattern{(hello)?~world} which gives the correct result.
 
-Another problem that can be addressed this way is that the alternative operation extends as far as possible within a pattern. The pattern \pattern{hello|goodbye~world} does not match \inp{hello~world} as intended but just \inp{hello} and \inp{goodbye~world}. The correct pattern would be \pattern{(hello|goodbye)~world}.
+Another problem that can be addressed this way is that the alternative operatior extends as far as possible within a pattern. The pattern \pattern{hello|goodbye~world} does not match \inp{hello~world} as intended but just \inp{hello} and \inp{goodbye~world}. The correct pattern would be \pattern{(hello|goodbye)~world}.
 
-Grouping parts of a pattern with parentheses comes very natural since it works the same way as in arithmetic but it actually has an additional side effect. The regex engine will store whatever is matched within the group in a numbered list. When the pattern \pattern{hello (.*), are you (good|fine|okay)?} is applied to the input \inp{hello Steve, are you fine?} the regex engine will store the numbered groups:
+Grouping parts of a pattern with parentheses comes naturally since it works the same way as in arithmetic but it actually has an additional side effect. The regex engine will store whatever is matched within the group in a numbered list. When the pattern \pattern{hello (.*), are you (good|fine|okay)?} is applied to the input \inp{hello Steve, are you fine?} the regex engine will store the numbered groups:
 
 \begin{enumerate}
     \setcounter{enumi}{-1} 
@@ -137,7 +139,7 @@ By convention there is always an implicit zeroth group that contains the entire 
 \end{enumerate}
 
 
-This behavior is not always desired. Sometimes groups are just necessary to form the correct pattern. This can quickly lead to too many captured groups and make it hard to find the correct one. To avoid this, it is possible to use non-capturing groups \pattern{(?:<\emph{pattern}>)} which behave the same way but are not captured. 
+This behavior is not always desired. Sometimes groups are just necessary to form the correct pattern. This can quickly lead to too many captured groups and make it hard to find the correct one. To avoid this, it is possible to use non-capturing groups \pattern{(?:<\emph{pattern}>)} which behave the same way but do not capture the input.
 
 To make it even easier to retrieve the correct match, most regex dialects also allow to explicitly name capture groups. This is done with some variation of \pattern{(?\textbf{<}name\textbf{>}\placeholder)} or \pattern{(?P\textbf{<}name\textbf{>}\placeholder)}.\footnote{Note that the bold angle brackets are part of the regex and not placeholder.} Capturing groups can be particularly powerful when combined with a search and replace operation where the number or name of captured input can be used within the replacement.
 
@@ -151,22 +153,22 @@ Look-arounds allow patterns to match input based on its surroundings. It can eit
 
 A positive look-ahead is written as \pattern{X(?=Y)} and will match any \pattern{X} followed by \pattern{Y}. The negative version \pattern{X(?!Y)} will match any \pattern{X} that is not followed by \pattern{Y}. Similarly positive look-behinds are written as \pattern{(?<=Y)X} and \pattern{(?<!Y)X} which matches \pattern{X} that is preceded or not preceded by \pattern{Y} respectively.
 
-It may not be obvious from the definitions alone but the negative versions provide far more benefits than their positive counterparts. The regex \pattern{(?<=Bob).*?(?=Alice)} uses a positive look-ahead and -behind to extract information about the lovers as \inp{likes} or \inp{kissed} but could easily be replaced by \pattern{Bob(?<action>.*?)Alice} which captures the information inside a group called \emph{action}.
+It may not be obvious from the definitions alone but the negative versions provide far more benefits than their positive counterparts. The regex \pattern{(?<=Bob).*?(?=Alice)} uses a positive look-ahead and -behind to extract information about the lovers like \inp{likes} or \inp{kissed} but could easily be replaced by \pattern{Bob(?<action>.*?)Alice} which captures the same information inside a group called \emph{action}.
 
 The negative look-behind on the other hand is not trivially replaced. The pattern \pattern{(?<name>[A-Za-z]+)(?<!Bob)~kisse(d|s)~Alice} for example, uses a negative look-behind to find the names of romantic rivals of Bob which can be found in statements like \inp{Tom~kissed~Alice}.
 
-This does not mean that there is no use for positive look-arounds. The special property that all look-arounds poses is that while they match a part of a string they do not consume them. This means that the pattern \pattern{X(?=Y)Z} allows \pattern{Y} to be part of the maybe more complex subpattern \pattern{Z} which may make retrieving the information easier. It can also be useful in combination with the \code{string.split(sep)} method when it is not intended to remove the separator from the output.
+This does not mean that there is no use for positive look-arounds. The special property that all look-arounds possess is that while they match a part of a string they do not consume them. This means that the pattern \pattern{X(?=Y)Z} allows \pattern{Y} to be part of the maybe more complex subpattern \pattern{Z} which may make retrieving the information easier. It can also be useful in combination with the \code{string.split(sep)} method when it is not intended to remove the separator from the output.
 
 \subsubsection{Backreferences}
 
-Sometimes, the input contains interdependencies. This can be observed when there are different options for the same delimiter like double and single quotes. When the pattern \pattern{("|').*?("|')} is applied to an input with nested quotes, it matches them incorrectly (figure \ref{fig:regexNestedQuotes}).
+Sometimes, the input contains interdependencies. This can be observed when there are different options for the same delimiter like double and single quotes. When the pattern \pattern{("|').*?("|')} is applied to an input with nested quotes, it matches them incorrectly (Listing \ref{fig:regexNestedQuotes}).
 
 \begin{listingBox}[title={Nested Quotes matched incorrectly by \pattern{("|').*?("|')}},label=fig:regexNestedQuotes,width=14cm,center]
     \matched{\textquotedbl{}He~said~\textquotesingle{}}good~day\matched{\textquotesingle{}~to~me,\textquotedbl{}}~Robert~said.
 \end{listingBox}
 
 
-In order to match this example correctly, the second quote must remember what the first matched quote was. For this, the contents of the $x$th capture groups can be accessed by using a backreference \pattern{\bs x} (see figure \ref{fig:regexNestedQuotesBackref}). It is also possible to refer back to named capture groups \pattern{(?<quote>"|').*\bs k<quote>}.
+In order to match this example correctly, the second quote must remember what the first matched quote was. For this, the contents of the $x$th capture groups can be accessed by using a backreference \pattern{\bs x} (see figure \ref{fig:regexNestedQuotesBackref}). It is also possible to refer back to named capture groups with \pattern{(?<quote>"|').*\bs k<quote>}.
 
 \begin{listingBox}[title={Nested Quotes matched correctly by \pattern{("|').*?\bs 1}},label=fig:regexNestedQuotesBackref,width=14cm,center]
     \matched{\textquotedbl{}He~said~{\textquotesingle{}good~day\textquotesingle{}}~to~me\textquotedbl,}~Robert~said.
@@ -176,19 +178,19 @@ In an ironic collision of definitions it is this feature that makes regular expr
 
 \subsubsection{Atomic Groups and Possessive Quantifiers}
 
-Backtracking is one of the most important principles in regular expressions but there are cases where it is not desirable. Figure \ref{fig:regexNonPossessive} shows a pattern that is supposed to match all units that are not measured in feet but finds an incorrect match because the measurement is more than one digit long. At first the \inp{36} is matched by \pattern{\bs d+} as expected but when the negative look-ahead fails, the engine backtracks and only matches \inp{3} and the look-ahead succeeds.
+Backtracking is one of the most important principle in regular expressions but there are cases where it is not desirable. Figure \ref{fig:regexNonPossessive} shows a pattern that is supposed to match all units that are not measured in feet but finds an incorrect match because the measurement is more than one digit long. At first the \inp{36} is matched by \pattern{\bs d+} as expected but when the negative look-ahead fails, the engine backtracks and only matches \inp{3} after which the rest of the pattern matches as well.
 
 \begin{listingBox}[title={Backtracking leads to incorrect Match with \pattern{\bs d+(?!ft)}},label=fig:regexNonPossessive,width=14cm,center]
     \matched{3}6ft is about 12m
 \end{listingBox}
 
-This problem can be solved by using atomic groups which prevent the regex engine from backtracking. They are defined by surrounding the subpattern with \pattern{(?>\placeholder)} and behave like non-capturing groups with the additional property that the engine does not create save states within them and can therefore not backtrack inside them. Once the engine has matched them, it cannot return and change it. Figure \ref{fig:regexPossessive} shows the corrected example.
+This problem can be solved by using atomic groups which prevent the regex engine from backtracking. They are defined by surrounding the subpattern with \pattern{(?\textbf{>}\placeholder)} and behave like non-capturing groups with the additional property that the engine does not create saved states within them and can therefore not backtrack inside them. Once the engine has matched them, it cannot return and change it. Figure \ref{fig:regexPossessive} shows the corrected example.
 
 \begin{listingBox}[title={Atomic Groups \pattern{(?>\bs d+)(?!ft)} prevent Backtracking},label=fig:regexPossessive,width=14cm,center]
     36ft is about \matched{12}m
 \end{listingBox}
 
-Since atomic groups are very commonly combined with quantifiers, there are special so called possessive quantifiers that are automatically wrapped in atomic groups. They are marked by appending a plus sign to the normal quantifiers. The regex in figure \ref{fig:regexPossessive} could be written as \pattern{\bs d++(?!ft)} as well. Atomic groups and possessive quantifiers are only supported in a few regex dialects but in most cases their behavior can be mimicked by using negative look-aheads. In the example, the digit class can simply be included in the look-ahead \pattern{\bs d(?!\bs d|ft)}.
+Since atomic groups are very commonly combined with quantifiers, there are special so-called possessive quantifiers that are automatically wrapped in atomic groups. They are marked by appending a plus sign to the normal quantifiers. The regex in figure \ref{fig:regexPossessive} could be written as \pattern{\bs d++(?!ft)} as well. Atomic groups and possessive quantifiers are only supported in a few regex dialects but in most cases their behavior can be mimicked by using negative look-aheads. In the example, the digit class can simply be included in the look-ahead \pattern{\bs d(?!\bs d|ft)}.
 
 While they do not seem important for this example, possessive quantifiers are very important in addressing a certain class of performance problems (see section \ref{sec:redos}).
 

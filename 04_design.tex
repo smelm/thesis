@@ -3,11 +3,11 @@
 
 This chapter will analyze the potential users of the DSL and the relative importance of regex language features and define the core design philosophies that the DSL will follow.
 
-\section{Who is the User?}
+\section{Target Demographics}
 
 The first step in design should always be to ask \emph{who} the product is designed for which then informs \emph{how} it is designed. This section will introduce the two primary target users and present their differing needs.
 
-\subsection{Target Demographics}
+\subsection{Developers}
 
 The first group are developers who most likely already use regex on a regular basis and are therefore aware of its flaws \cite{RegexNotLinguaFranca}\cite{RegexesAreHard}. In recent years more focus has been put on clean code and developers prefer simple and understandable solutions over clever ones. The recent development of multiple DSLs for regular expressions (see section \ref{sec:relatedWork}) indicates that the same mindset is also applied to regular expressions.
 
@@ -39,7 +39,7 @@ The applications of such a DSL are numerous. Spread sheets, managing emails, sea
 
 This group is in many aspects the polar opposite of the group of developers. Sections \ref{sec:dslDesignPrinciples} will discuss how it is possible to unify these requirements and design a DSL for both groups.
 
-\section{Analysis of RegEx Usage} \label{sec:analysisRegexUsage}
+\section{Analysis of Regex Usage} \label{sec:analysisRegexUsage}
 
 To adequately address the issues of regex, it is not only important to understand how they work but also how they are used. This section will analyse the usage of regular expressions in real-world code bases. It is based on the regex polyglot corpus \cite{RegexNotLinguaFranca} which contains 537,806 patterns from 193,524 open source projects.
 
@@ -125,11 +125,11 @@ Namespaces are one honking great idea - let's do more of those!
 \end{lstlisting}
 \end{listingBox}
 
-\subsection{Two is better than one} \label{sec:twoIsBetter}
+\subsection{Two is better than One} \label{sec:twoIsBetter}
 
 When looking at the different requirements of programmers and non-programmers, it becomes obvious that some of them are mutually exclusive. The only obvious way to bridge this gap are compromises and trade-offs which would inevitably reduce the appeal to one of the demographics. This work will take another approach. Rather than choosing a one-size-fits-all solution, it introduces two different DSLs -- an internal and an external one -- that addresses the groups individually. By designing the architecture with this in mind, the two languages can complement each other.
 
-\subsection{Verbosity and Readability}
+\subsection{Verbose but Readable}
 
 The first seven lines of the Zen of Python (figure \ref{fig:zenOfPython}) emphasize that the language should be simple, readible and avoid density. The main goal of the domain specific language is to present the same concepts as regular expressions in a more explicit manner. This entails using keywords or function names instead of single characters. The non-programmer facing DSL will imitate the English syntax and air on the side of being too verbose. This will also be a useful exploration of the design space and may facilitate discussions on how much verbosity is too much.
 
