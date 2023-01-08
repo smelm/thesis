@@ -180,13 +180,13 @@ In an ironic collision of definitions it is this feature that makes regular expr
 
 Backtracking is one of the most important principle in regular expressions but there are cases where it is not desirable. The pattern (\textbf{\figureref{fig:regexNonPossessive}}) is supposed to match all units that are not measured in feet but finds an incorrect match because the measurement is more than one digit long. At first the \inp{36} is matched by \pattern{\bs d+} as expected but when the negative look-ahead fails, the engine backtracks and only matches \inp{3} after which the rest of the pattern matches as well.
 
-\begin{listingBoxFigure}[title={Backtracking leads to incorrect Match with \pattern{\bs d+(?!ft)}},label=fig:regexNonPossessive,width=14cm,center]
+\begin{listingBoxFigure}[title={Backtracking leads to incorrect match with \pattern{\bs d+(?!ft)}},label=fig:regexNonPossessive,width=14cm,center]
     \matched{3}6ft is about 12m
 \end{listingBoxFigure}
 
 This problem can be solved by using atomic groups which prevent the regex engine from backtracking. They are defined by surrounding the subpattern with \pattern{(?\textbf{>}\placeholder)} and behave like non-capturing groups with the additional property that the engine does not create saved states within them and can therefore not backtrack inside them. Once the engine has matched them, it cannot return and change it (\figureref{fig:regexPossessive}).
 
-\begin{listingBoxFigure}[title={Atomic Groups \pattern{(?>\bs d+)(?!ft)} prevent Backtracking},label=fig:regexPossessive,width=14cm,center]
+\begin{listingBoxFigure}[title={Atomic groups \pattern{(?>\bs d+)(?!ft)} prevent backtracking},label=fig:regexPossessive,width=14cm,center]
     36ft is about \matched{12}m
 \end{listingBoxFigure}
 

@@ -4,7 +4,7 @@ This chapter presents the DSL RexRegex and introduces the \textsc{utgast} (Unit 
 
 \section{General Structure}
 
-\begin{boxFigure}[title={Stages of Compilation},label=fig:stagesOfCompilation]
+\begin{boxFigure}[title={Stages of compilation},label=fig:stagesOfCompilation]
 \includegraphics[width=\textwidth,trim=30 50 30 50, clip]{./images/arch.jpg}
 \end{boxFigure}
 
@@ -16,7 +16,7 @@ The internal DSL is a simple abstraction layer that provides a more user-friendl
 
 This script consists of one or more expressions which are either a single line or a block spanning multiple lines. Block expressions start with a node-specific header like \code{many of}, followed by the child expressions and end with by the \code{end} keyword. While it is not required, it is recommended to indent the child expressions to increase readability. For short patterns, the DSL also provides a one-line alternative for most block constructs.
 
-\begin{newBoxTable}[title={Fields of the AST Nodes},label=tab:astFields,width=12.5cm,center]{l|l}
+\begin{newBoxTable}[title={Fields of the AST nodes},label=tab:astFields,width=12.5cm,center]{l|l}
     AST Node &  Fields \\ \mytoprule
     \keyword{Character} &  \keyword{value: char} \\ \hline
     \keyword{Any} & \keyword{-} \\ \hline
@@ -30,13 +30,13 @@ This script consists of one or more expressions which are either a single line o
 \end{newBoxTable}
 
 
-\begin{newBoxTable}[title={API Use of Internal DSL},width=15cm]{l|l}
+\begin{newBoxTable}[title={API of the internal DSL},width=15cm]{l|l}
     Internal DSL                             & Regex          \\ \mytoprule
     \keyword{character("c")}  & \keyword{c} \\ \hline
     \keyword{literal("hello")}  & \keyword{hello} \\ \hline
     \keyword{any()}  & \keyword{.} \\ \hline
     \keyword{letter("EN")}  & \keyword{[a-zA-Z]} \\ \hline
-    \keyword{letter("DE")}  & \keyword{[a-zA-ZäÄöÖüÜ]} \\ \hline
+    \keyword{letter("DE")}  & \keyword{[a-zA-ZäÄöÖüÜß]} \\ \hline
     \keyword{digit()}  & \keyword{\bs d} \\ \hline
     \keyword{alternative(exp, exp, exp)}  & \keyword{(:?exp|exp|exp)} \\ \hline
     \keyword{sequence(a, b, c)}  & \keyword{(:?abc)} \\ \hline
@@ -63,7 +63,7 @@ The easiest way to deal with literal characters is to allow letters to represent
 RexRegex only treats expressions as literals if they are surrounded with double quotes. This is the convention in programming languages to mark string literals and also intuitive for non-programmers. String literals are internally converted into sequences of single characters. Using this rule and the \code{any} keyword introduced in the next section, the DSL snippet (\listingref{code:dslLiteralChars}) matches inputs like \inp{abcany!}.
 
 \vspace{5mm}
-\begin{rexregexBox}[title={Literal characters in External DSL},label=code:dslLiteralChars,width=10cm,center]
+\begin{rexregexBox}[title={Literal characters in RexRegex},label=code:dslLiteralChars,width=9.5cm,center]
 "abc"
 "any"
 any
@@ -75,7 +75,7 @@ The \code{any} keyword can be used to match every possible character and mostly 
 
 \section{Character Classes} \label{sec:dslCharClasses}
 
-\begin{rexregexBox}[label=code:dslCharClasses,title=Character classes,width=10cm,center]
+\begin{rexregexBox}[label=code:dslCharClasses,title=Character classes in RexRegex,width=9.5cm,center]
 any of
     LETTER.EN
     ".", "?", "!", ","
@@ -92,7 +92,7 @@ The user can match alternatives like \pattern{ab|abc|\bs d} by using the \code{e
 
 \section{Quantifiers}
 
-\begin{rexregexBox}[title={Quantifiers in RexRegex},label=code:quantifiersInRexRegex,width=10cm,center]
+\begin{rexregexBox}[title={Quantifiers in RexRegex},label=code:quantifiersInRexRegex,width=8.5cm,center]
 3 of ...
 1 to 3 of ...
 0 to many of ...
@@ -152,7 +152,7 @@ For a similar reason RexRegex does not implement look-arounds as primitives. Whi
 
 \section{Groups and Backreferences}
 
-\begin{rexregexBox}[label=code:dslGroupsAndBackrefs,title=Groups and Backreferences in RexRegex]
+\begin{rexregexBox}[label=code:dslGroupsAndBackrefs,title=Groups and backreferences in RexRegex,width=11.3cm,center]
 named quote
     either QUOTE.SINGLE or QUOTE.DOUBLE
 end
@@ -166,7 +166,7 @@ The contents of a group can be matched again with \code{same as \emph{<name>}} w
 
 \section{Macros and Extensions} \label{sec:macros}
 
-\begin{rexregexBox}[float=htb,label=code:dslMacros,title=Macros in RexRegex,width=12cm,center]
+\begin{rexregexBox}[float=htb,label=code:dslMacros,title=Variables and macros in RexRegex,width=11.2cm,center]
 define logLevel as
     either "DEBUG" or "ERROR" or "INFO"
 end
@@ -192,7 +192,7 @@ this allows the user to load their own or third party functions into the DSL. Re
 
 \listingref{code:emailPattern} showcases a full example of the RexRegex DSL. Matching email addresses is a notoriously difficult task and the regex that achieves it (\listingref{code:emailRegex}) is challenging to read \cite{EmailRegex}. While verbose, the DSL code is a lot easier to read and understand.
 
-\begin{rexregexBox}[float=htbp,title={RexRegex Code for Validating Email Addresses},breakable,label=code:emailPattern,width=13cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily}]
+\begin{rexregexBox}[float=htbp,title={RexRegex code for validating email addresses},breakable,label=code:emailPattern,width=12cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily}]
 define ipAddress as
     begin separatedBy(".")
         1 to 3 of DIGIT
@@ -232,14 +232,14 @@ end
 
 {
 \hypersetup{citecolor=white}
-\begin{listingBox}[float=htb,title={Regex for Validating Email Addresses \cite{EmailRegex}},label=code:emailRegex]
+\begin{listingBox}[float=htb,title={Regex for validating email addresses \cite{EmailRegex}},label=code:emailRegex]
     \lstinputlisting[basicstyle=\small\bfseries\ttfamily,nolol]{./emailRegex.txt}
 \end{listingBox}
 }
 
 \section{Semantic Verification} \label{sec:verification}
 
-\begin{newBoxTable}[title={Samples Generated For the Logline Pattern (Listing \ref{code:dslMacros})},label=tab:loglineSamples,width=16cm,center]{l|l}
+\begin{newBoxTable}[title={Samples generated for the logline pattern (Listing \ref{code:dslMacros})},label=tab:loglineSamples,width=16cm,center]{l|l}
     Positive & Negative \\ \mytoprule
     {\small\keyword{1778-03-07 02:03:15 [INFO] qBDGT} }  &  {\small \keyword{004=-11-09 22:06:04 [ERROR] H}} \\ \hline
     {\small\keyword{0173-10-04 06:19:28 [DEBUG] AJuIt}}  &  {\small \keyword{0b04-10-06 19:50:51 [INFO] RBjaab}} \\ \hline
@@ -263,7 +263,7 @@ When a test case for the quantifier behavior in \code{many of "a"} is added, it 
 
 RexRegex does not only provide a mechanism for transforming the AST to regex, but also to generate positive and negative test samples. This leverages the nested nature of the DSL to test the nested semantics of regex. Since it is the AST that produces these unit tests, it is called the Unit Test Generating Abstract Syntax Tree (\textsc{utgast}) framework.
 
-\begin{pseudoCode}[float=htb,title={Generating Positive Test Samples},label=code:verificationPositive]
+\begin{pseudoCode}[float=htb,title={Generating positive test samples},label=code:verificationPositive]
 function samples+(node, ast):
   switch node.type:
     case Character: %\label{code:positivesCharStart}%
@@ -340,7 +340,7 @@ Negative samples for backreferences can be generated by any derangement (permuta
 
 Together these two algorithms can create a complete test suite from a given set of DSL examples which can be used to verify the compilation results indenpendently of the regex dialect (\tableref{tab:loglineSamples}).
 
-\begin{pseudoCode}[title={Generating Negative Test Samples},breakable=true,label=code:verificationNegative]
+\begin{pseudoCode}[title={Generating negative test samples},breakable=true,label=code:verificationNegative]
 function samples-(node, ast):
   switch node.type:
     case Character: %\label{code:negativeCharStart}%
@@ -419,7 +419,7 @@ This is based on the work of Machine Learning Lab that implemented a genetic alg
 
 \FloatBarrier
 
-\begin{listingBox}[float=htb,title={Infered RexRegex Code from Examples},label=code:inferenceOfRexRegex]
+\begin{listingBox}[float=htb,title={Inferred RexRegex code from examples},label=code:inferenceOfRexRegex]
     \begin{lstlisting}[basicstyle=\scriptsize,mathescape=true]
 Jan 12 06:26:19: ACCEPT service http from 119.63.193.196 to firewall(pub-nic), 
     prefix: "none" (in: eth0 119.63.193.196($\matchedSmall{\text{5c:0a:5b:63:4a:82}}$):4399 -> 

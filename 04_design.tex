@@ -49,7 +49,7 @@ The start of input or line anchor \pattern{\caret} is one of the most commonly u
 
 Repetition with \pattern{*} and \pattern{+} are very common, while all other types of quantifiers are rarely used -- including lazy quantifiers. Possessive quantifiers have been excluded from this analysis since most languages in the dataset do not support them. 
 
-\begin{newBoxTable}[float=t,title={Basic Regex Feature Usage},label=tab:basicRegexFeatureUsage,width=143mm]{X|l|r|r}
+\begin{newBoxTable}[float=t,title={Usage of basic regex features},label=tab:basicRegexFeatureUsage,width=143mm]{X|l|r|r}
         Description & Pattern & Count  & \% \\ \mytoprule
         any                             & \keyword{.}              & 137,436 & 12.99 \\ \hline
         character class                 & \keyword{[abc]}          & 115,592 & 10.93 \\ \hline
@@ -74,7 +74,7 @@ Groups are also very common with the plain parentheses \pattern{(\placeholder)} 
 
 The more advanced features of regular expressions like look-arounds and unicode properties are -- as to be expected -- less frequently used. Only word boundaries which occur in $1.71$\% of samples, stand out which may be partially explained by their unique expressive power.
 
-\begin{newBoxTable}[float=t,title={Advanced Regex Feature Usage},label=tab:advancedRegexFeatureUsage,width=143mm]{X|l|r|r}
+\begin{newBoxTable}[float=t,title={Usage of advanced regex features},label=tab:advancedRegexFeatureUsage,width=143mm]{X|l|r|r}
         Description & Pattern & Count  & \% \\ \mytoprule
         lazy repeat with star           & \keyword{p*?}            &  11,298 & 01.07  \\ \hline
         lazy repeat with plus           & \keyword{p+?}            &  13,412 & 01.27  \\ \hline

@@ -57,7 +57,7 @@ This perception is by no means unique to the author of the article. 65\% of prog
 
 {
 \hypersetup{citecolor=white}
-\begin{listingBox}[title={Comparison of Regex \cite{regexWithComments} and Brainfuck \cite{brainfuckExample}},label=fig:regexVsBrainfuck,width=15.7cm,center]
+\begin{listingBox}[title={Comparison of Brainfuck \cite{brainfuckExample} and regex \cite{regexWithComments}},label=fig:regexVsBrainfuck,width=15.7cm,center]
 \begin{flushleft} \textbf{Brainfuck} \end{flushleft}
 \vspace{-1em}
 \begin{lstlisting}[basicstyle=\ttfamily]
@@ -82,7 +82,7 @@ This perception is by no means unique to the author of the article. 65\% of prog
 
 An analysis of the 537,806 patterns from the polyglot regex corpus \cite{RegexNotLinguaFranca} shows that regular expressions contain more special characters than normal letters (\tableref{tab:regexCharDist}). While programmers are used to a certain amount of special characters, this is a lot more than any codebase would have. For comparison, of the $1.851.901$ characters of the gnu-core-utils codebase \cite{GnuCoreUtils} only about 20\% are special characters while 78\% are normal letters. This imbalance is not helped by the fact that, by default, regular expressions do not allow whitespaces. It comes as no suprise that 70\% of surveyed developers find regular expressions to be less readable than normal code \cite{RegexesAreHard}.
 
-\begin{newBoxTable}[title={Character Distribution in Regex},label=tab:regexCharDist,width=11.5cm,center]{X|r|r|r}
+\begin{newBoxTable}[title={Character distribution in regex},label=tab:regexCharDist,width=11.5cm,center]{X|r|r|r}
         Character Type & Count  & \% & Mean per Pattern \\ \mytoprule
         Letters   & 8,432,429  & 42.66  & 7.97  \\ \hline
         Digits    & 1,038,590  &  5.25  & 0.98  \\ \hline
@@ -104,13 +104,13 @@ This is no exception and applies to most special characters. The user must remem
 
 Another problem stems from the fact that the look of regular expressions differs from how they work. It is easy for a user to assume that regex are a description of how the matching input looks like. Most expressions look like the expected matching input string with some parts replaced by special patterns. The pattern \pattern{".*"} (\figureref{fig:regexSurroundingTooGreedy}) seems like a correct regular expression because it has the same shape as the expected input string. The user is tempted to believe that regular expressions are a declarative language, while they are actually imperative. 
 
-\begin{newBoxTable}[title={Ambiguity of the Question Mark Character},label=tab:questionMark,width=12cm,center]{X|X}
+\begin{newBoxTable}[title={Ambiguity of the question mark character},label=tab:questionMark,width=10.7cm,center]{X|l}
     Pattern & Meaning \\ \mytoprule
     \regex{\bs ?}, \regex{[?]} & literal question mark \\ \hline
-    \regex{a?} & optional a \\ \hline
+    \regex{a?} & optional quantifier \\ \hline
     \regex{a??, a+?, a*?, a\{X,Y\}?} & lazy quantifier \\ \hline
     \regex{(?:a)} & non-capturing group \\ \hline
-    \regex{(?<name>a)} & capturing group with name \\ \hline
+    \regex{(?<name>a)} & named capturing group \\ \hline
     \regex{a(?=b)} & positive look-ahead\\ \hline
     \regex{a(?!b)} & negative look-ahead\\ \hline
     \regex{(?<=b)a} & positive look-behind\\ \hline
@@ -156,7 +156,7 @@ About 50\% of developers believe that regex implementations can be used intercha
 
 \section{Regex Denial of Service Attacks (ReDoS)} \label{sec:redos}
 
-\begin{newBoxTable}[float=tbh,title={Visualization of Catastrophic Backtracking},label=fig:superLinear,width=13cm,halign=left]{r|cc|c|cc|c||r|cc|c|cc|c}
+\begin{newBoxTable}[float=tbh,title={Visualization of catastrophic backtracking},label=fig:superLinear,width=13cm,halign=left]{r|cc|c|cc|c||r|cc|c|cc|c}
     & \multicolumn{2}{c|}{\bs s} & \#? & \multicolumn{2}{c|}{\bs s} & \dollar & & \multicolumn{2}{c|}{\bs s} & \#? & \multicolumn{2}{c|}{\bs s} & \dollar \\ \mytoprule
         1.  & \hly{\ws} & \hly{\ws} & \hlh{\#} & \hlg{\ws} & \hlg{\ws} & x & 10. & \hly{\ws} &      \ws  &      \#  & \hlg{\ws} & \hlg{\ws} & x \\
         2.  & \hly{\ws} & \hly{\ws} & \hlh{\#} & \hlg{\ws} &      \ws  & x & 11. & \hly{\ws} &      \ws  &      \#  & \hlg{\ws} &      \ws  & x \\
