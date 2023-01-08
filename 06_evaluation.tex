@@ -1,6 +1,6 @@
 \chapter{Evaluation}
 
-This work presents the domain specific language RexRegex and the \textsc{utgast} framework in an attempt to address the issues of regular expressions. This chapter will evaluate whether it succeeded.
+This work presents the domain specific language RexRegex and the \utgast{} framework in an attempt to address the issues of regular expressions. This chapter will evaluate whether it succeeded.
 
 \section{Drawbacks}
 
@@ -16,17 +16,17 @@ In his lecture \enquote{On Successful Language Design} \cite{OnSuccessfulLanuage
 
 \section{Benefits}
  
-RexRegex code is very readable. Its keywords and syntax algin with the English language and allow a very intuitive user experience. The exclusion of imperative concepts and high-level abstractions allow for a very declarative style. These factors make RexRegex an ideal tool for non-programmers who would appreciate its beginner-friendly syntax and self-explanatory nature. It is reasonable to expect that even without prior programming knowledge someone would be able to use RexRegex after a short learning period. Whenever this is not the case, the inference mechanism provides a starting-of-point for the user.
+RexRegex code is very readable. Its keywords and syntax align with the English language and allow a very intuitive user experience. The exclusion of imperative concepts and high-level abstractions allow for a very declarative style. These factors make RexRegex an ideal tool for non-programmers who would appreciate its beginner-friendly syntax and self-explanatory nature. It is reasonable to expect that even without prior programming knowledge someone would be able to use RexRegex after a short learning period. Whenever this is not the case, the inference mechanism provides a starting-of-point for the user.
 
 The internal DSL allows a seamless integration into the host language which appeals to developers. It allows them to leverage IDE features for easy access to type information and documentation, while being more maintainable than regex. It strikes a good balance between readability and ease of use.
 
 The DSL can easily be expanded to compile to additional regex dialects. The test suite can be applied to the new compilation target with little overhead and guarantees that the DSL is consistent across languages.
 
-The macro and extension system allow the language to grow in a maintainable fashion. It provides a way for the users to expand the language themselves. The integration with the \textsc{utgast} framework makes it easy for contributors to ensure that the additions are well-tested and that every new extension is compatible with all compilation targets. Extensions allow the user to mold the DSL to their specific domain and create abstractions for a more declarative style and readability. There is a foreseeable future where matching an email would only be an import statement away, while the user can rest assured that the pattern was verified for the programming language they use. This scenario is a vast improvement over the current state of affairs where regular expressions are copied regularly from online sources with a significant likelihood that they may function differently than intended \cite{RegexNotLinguaFranca}.
+The macro and extension system allow the language to grow in a maintainable fashion. It provides a way for the users to expand the language themselves. The integration with the \utgast{} framework makes it easy for contributors to ensure that the additions are well-tested and that every new extension is compatible with all compilation targets. Extensions allow the user to mold the DSL to their specific domain and create abstractions for a more declarative style and readability. There is a foreseeable future where matching an email would only be an import statement away, while the user can rest assured that the pattern was verified for the programming language they use. This scenario is a vast improvement over the current state of affairs where regular expressions are copied regularly from online sources with a significant likelihood that they may function differently than intended \cite{RegexNotLinguaFranca}.
 
 \section{Research Questions}
 
-During the course of this text all research questions posed in the introduction were discussed and the findings are summarised here.
+During the course of this text all research questions posed in the introduction were discussed and the findings are summarized here.
 
 \subsubsection{RQ1: \RQone}
 
@@ -38,7 +38,7 @@ Poor readability is the root cause of most problems of regular expressions and m
 
 \subsubsection{RQ3: \RQthree}
 
-On average, more than 50\% of the characters in regex are special characters and in 30\% of patterns at least one of them needs to be escaped, which gives a reasonable explaination for their poor readability. Every other developer reuses more than half of the regex patterns from other sources. An equal number of developers belief that regular expressions are compatible across languages, which is not the case \cite{RegexNotLinguaFranca}.
+On average, more than 50\% of the characters in regex are special characters and in 30\% of patterns at least one of them needs to be escaped, which gives a reasonable explanation for their poor readability. Every other developer reuses more than half of the regex patterns from other sources. An equal number of developers belief that regular expressions are compatible across languages, which is not the case \cite{RegexNotLinguaFranca}.
 
 \subsubsection{RQ4: \RQfour}
 
@@ -46,7 +46,7 @@ RexRegex addresses the readability issues by requiring the user to escape sequen
 
 \subsubsection{RQ5: \RQfive}
 
-The \utgast{} framework automatically generates positive and negative test strings from RexRegex AST nodes. These can be used as unit tests to verify that the produced regular expression exihibits the expected behavior in the regex dialect it was compiled for.
+The \utgast{} framework automatically generates positive and negative test strings from RexRegex AST nodes. These can be used as unit tests to verify that the produced regular expression exhibits the expected behavior in the regex dialect it was compiled for.
 
 \subsubsection{RQ6: \RQsix}
 
