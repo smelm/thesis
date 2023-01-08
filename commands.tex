@@ -118,8 +118,7 @@
 
 \newcommand*{\ws}{\char32}
 
-\newtcolorbox[blend into=figures]{boxFigure}[1][]{float=htb, halign=center,  every float=\centering, #1, colback=white, colframe=Green3!90!black}
-        
+\newtcolorbox[blend into=figures]{boxFigure}[1][]{float=htb, halign=center,  every float=\centering, #1, colback=white, colframe=blue!90!white}
 
 \tcbset{myTabStyle/.style={
     enhanced,
@@ -169,13 +168,19 @@
             mathescape=true,
             style=shared,
             basicstyle=\small\ttfamily,
-            morekeywords={function,mod,switch,return,case,for,to,if,else,end,until}, 
+            emph={function,mod,switch,return,case,for,to,if,else,end,until}, 
+            morekeywords={Character,Any,CharacterClass,Alternative,Sequence,Quantifier,Group,Backreference}, 
             keywordstyle=\color{black}\bfseries,
             morestring={[b]"},
-            stringstyle=\color{red},
-            escapechar={\%}
+            stringstyle=\color{Firebrick3!90!white},
+            escapechar={\%},
+            emphstyle={\color{blue!80!black}\bfseries},
         },
     }
+    % keywordstyle=\color{black}\bfseries,
+    % identifierstyle={\color{MediumPurple4!80!black}},
+    % emph={any,define,either,except,many,same,begin,maybe,end,named},
+    % morestring={[b]"},
 
     \newtcolorbox[blend into=listings]{listingBox}[1][]{% 
         lstBox,
