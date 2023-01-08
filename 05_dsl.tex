@@ -168,16 +168,16 @@ The contents of a group can be matched again with \code{same as \emph{<name>}} w
 
 \section{Macros and Extensions} \label{sec:macros}
 
-\begin{rexregexBox}[float=htb,label=code:dslMacros,title=Usage of Macros in RexRegex,width=12cm,center]
+\begin{rexregexBox}[float=htb,label=code:dslMacros,title=Macros in RexRegex,width=12cm,center]
 define logLevel as
     either "DEBUG" or "ERROR" or "INFO"
 end
 
 define logLine as
     timestamp("YYYY-MM-DD HH:m:s")
-    surroundWith(logLevel, "[", "]")
+    wrapIn(logLevel, "[", "]")
     ":"
-    many of LETTER(EN)
+    many of LETTER.EN
     LINE.NEW
 end
 
@@ -241,6 +241,22 @@ end
 
 \section{Semantic Verification} \label{sec:verification}
 
+\begin{newBoxTable}[title={Samples Generated For the Logline Pattern (Listing \ref{code:dslMacros})},label=tab:loglineSamples,width=16cm,center]{l|l}
+    Positive & Negative \\ \mytoprule
+    {\small\keyword{1778-03-07 02:03:15 [INFO] qBDGT} }  &  {\small \keyword{004=-11-09 22:06:04 [ERROR] H}} \\ \hline
+    {\small\keyword{0173-10-04 06:19:28 [DEBUG] AJuIt}}  &  {\small \keyword{0b04-10-06 19:50:51 [INFO] RBjaab}} \\ \hline
+    {\small\keyword{2025-06-08 23:54:03 [ERROR] JXkga}}  &  {\small \keyword{208-10-26 21:44:52 [ERROR] wSqmiO}} \\ \hline
+    {\small\keyword{2038-05-10 20:50:41 [INFO] H}     }  &  {\small \keyword{1223-07-28 12Q03:02 [INFO] wSqmiO}} \\ \hline
+    {\small\keyword{0510-08-05 11:32:01 [INFO] tGGqc} }  &  {\small \keyword{2035-06-26 20:57:D3 [DEBUG] R}} \\ \hline
+    {\small\keyword{2054-03-14 21:58:57 [DEBUG] BcXSn}}  &  {\small \keyword{1223-07-28 12:03:02 wINFO] wSqmiO}} \\ \hline
+    {\small\keyword{0003-05-28 09:07:05 [DEBUG] qBDGT}}  &  {\small \keyword{1223-07-28 12:03:02 [DEBUJ] wSqmiO}} \\ \hline
+    {\small\keyword{0066-11-04 03:02:02 [INFO] JXkga} }  &  {\small \keyword{2083-08-30 10:15:20 [IyFO] M}} \\ \hline
+    {\small\keyword{2000-03-10 02:25:34 [ERROR] e}    }  &  {\small \keyword{0040-10-06 19:50:51 [EzROR] RBjaab}} \\ \hline
+    {\small\keyword{0008-06-30 23:19:28 [DEBUG] tGGqc}}  &  {\small \keyword{2018-11-20 22:05:37 [INFOg M}} \\ \hline
+    {\small\keyword{1959-11-29 17:55:55 [DEBUG] p}    }  &  {\small \keyword{1772-08-07 10:51:01 [ERRORg axRYpa}} \\ \hline
+\end{newBoxTable}
+
+
 Guaranteeing the correctness of the produced regex is not just a necessity but also a remarkable challenge. With the explosive number of required test cases, manual testing is not feasible, but even automated unit testing may not suffice. For $T$ target languages, $F$ language features and $N$ test cases per feature, the naive approach to testing requires $\mathcal{O}(T \cdot F \cdot N)$ test cases. This is not only work-intensive, but also too error-prone and unmaintainable for a real world application. 
 
 The tests cannot test the syntax of the generated regex; they must test its semantics instead. This can be achieved by verifying that the regex output matches a list of positive samples while rejecting a list of negative samples. This makes the test independent of the compilation target. But it is still dependent on both the language features and the different test cases, which is a problem. This means that the same properties are tested by similar substrings in different test cases. 
@@ -249,8 +265,8 @@ When a test case for the quantifier behavior in \code{many of "a"} is added, it 
 
 RexRegex does not only provide a mechanism for transforming the AST to regex, but also to generate positive and negative test samples. This leverages the nested nature of the DSL to test the nested semantics of regex. Since it is the AST that produces these unit tests, it is called the Unit Test Generating Abstract Syntax Tree (\textsc{utgast}) framework.
 
-\begin{pseudoCode}[title={Generating Positive Test Samples},breakable=true,label=code:verificationPositive]
-function positiveSamples(node, root):
+\begin{pseudoCode}[float=htb,title={Generating Positive Test Samples},label=code:verificationPositive]
+function samples+(node, ast):
   switch node.type:
     case Character: %\label{code:positivesCharStart}%
       return { node.value }
@@ -259,11 +275,11 @@ function positiveSamples(node, root):
     case CharacterClass: %\label{code:positiveCharClassStart}%
       return ${\displaystyle \hspace{-1.5em}\bigcup_{i}^\text{NUM SAMPLES}}\hspace{-1.5em}$ randomChar(randomChoice(node.ranges)) %\label{code:positiveCharClassEnd}%
     case Alternative: %\label{code:positiveAltStart}%
-      return ${\displaystyle \hspace{-2em}\bigcup_{\text{c }\in\text{ node.children}}\hspace{-2em}}$ positiveSamples(c) %\label{code:positiveAltEnd}%
+      return ${\displaystyle \hspace{-2em}\bigcup_{\text{c }\in\text{ node.children}}\hspace{-2em}}$ samples+(c, ast) %\label{code:positiveAltEnd}%
     case Sequence:  %\label{code:positiveSeqStart}%
-      seqOfSamples $\gets$ [ positiveSamples(c) $\mid$ c $\in$ node.children ]
+      seqOfSamples $\gets$ [ samples+(c, ast) $\mid$ c $\in$ node.children ]
       maxLen $\gets$ ${\displaystyle \hspace{-2em}\max_{\text{s } \in \text{ seqOfSamples}}}\hspace{-2em}$  length(s)
-      combinations $\gets$ newArray(maxLen, fill="")
+      combinations $\gets$ array with length maxLen filled with ""
       for i $\gets$ 0 to maxLen:
         for samples $\in$ seqOfSamples:
           sample $\gets$ samples[i mod length(samples)]
@@ -273,14 +289,18 @@ function positiveSamples(node, root):
       upper $\gets$ if node.upper $\neq$ $\infty$:
                  node.upper 
                else: node.lower + randomInt(1, 5) 
-      samples $\gets$ positiveSamples(node.child)
-      return ${\displaystyle \hspace{-1em}\bigcup_{\text{s }\in\text{ samples}}\hspace{-1em}}$ repeat(s, node.lower) $\cup$ repeat(s, upper)  %\label{code:positiveRepeatEnd}%
+      seqLow, seqUp $\gets$ new sequence AST nodes %\label{code:positiveRepeatFuncStart}%
+      for i $\gets$ 0 to node.lower:
+        addChild(seqLow, charClass(samples+(node.child, ast)))
+      for i $\gets$ 0 to upper:
+        addChild(seqUp, charClass(samples+(node.child, ast))))
+      return samples+(seqLow, ast) $\cup$ samples+(seqUp, ast) %\label{code:positiveRepeatEnd}%
     case Group: %\label{code:positiveBackrefStart}%
-        node.positiveSamples $\gets$ positiveSamples(node.child)        
-        return node.positiveSamples
+        node.samples+ $\gets$ samples+(node.child)        
+        return node.samples+
     case Backreference:
       group $\gets$ n $\in$ ast : n.type = Group $\land$ n.name = node.name
-      return group.positiveSamples %\label{code:positiveBackrefEnd}%
+      return group.samples+ %\label{code:positiveBackrefEnd}%
 \end{pseudoCode}
 
 \subsubsection{Generating Positive Samples}
@@ -295,10 +315,11 @@ Since the alternative construct is just the union of its children, the positive 
 
 The positive samples matched by a sequence are all combinations of positive samples of its children. The combination could be exhaustively generated using the Cartesian product but to avoid an explosion of test cases, a simpler method is used in which each entry is treated as a ring buffer and all $i$th samples are combined (lines \ref{code:positiveSeqStart}--\ref{code:positiveSeqEnd}).
 
-The positive samples for any quantifier can be generated by repeating the child samples by the lower and upper bound (lines \ref{code:positiveRepeatStart}--\ref{code:positiveRepeatEnd}). In cases like \code{many of} where there is no upper bound, a random upper bound is chosen. The function \code{repeat(str,n)} concatenates a string $n$ times with itself and returns the empty string when $n$ is zero.
+The positive samples for any quantifier are generated by creating two sequences with the length of the lower and upper bound and generating its positive samples (lines \ref{code:positiveRepeatStart}--\ref{code:positiveRepeatEnd}). In cases like \code{many of} where there is no upper bound, a random upper bound is chosen. The function \code{repeat(str,n)} concatenates a string $n$ times with itself and returns the empty string when $n$ is zero.
 
-The samples for backreferences require information about the samples generated by the corresponding group. For this reason, the produced samples are stored and can be accessed via tree search from the \code{root} node (lines \ref{code:positiveBackrefStart}--\ref{code:positiveBackrefEnd}).
+The samples for backreferences require information about the samples generated by the corresponding group. For this reason, the produced samples are stored and can be accessed via tree search from the \code{ast} (lines \ref{code:positiveBackrefStart}--\ref{code:positiveBackrefEnd}).
 
+\FloatBarrier
 \subsubsection{Generating Negative Samples}
 
 The generation of negative samples is shown in Listing \ref{code:verificationNegative}. The negative sample for a character is any other character, while \code{any} does not have negative samples since it matches everything (lines \ref{code:negativeCharStart}--\ref{code:negativeAnyEnd}). The negative samples for character classes are just the positive samples of the inverted class \pattern{[\caret \emph{<class>}]}. Thanks to the internal representation as lists of non-overlapping ranges, this just requires creating the ranges between the end and start of ranges and the minimum and maximum values (lines \ref{code:negativeClassStart}--\ref{code:negativeClassEnd}).
@@ -315,14 +336,14 @@ Since the negation of a node can potentially be infinite, this intersection is d
 
 Since any element and combination of elements can cause a sequence to not match, it can produce a lot of negative samples. For sequence length $n$ and $k$ not matching sequence elements alone there are ${k}\choose{n}$ possibile combinations. To prevent combinatorial explosion, only cases where a single element is negative are considered. This also simplifies the algorithm which is then only required to split the \code{children} into a prefix and suffix for which the positive samples are generated and the negative samples of the $i$th element are inserted between them. The function \code{combine} represents the same algorithm that was used to combine the positive samples (Listing \ref{code:verificationPositive}, lines \ref{code:positiveSeqStart}--\ref{code:positiveSeqEnd}). If cases of two proverbial wrongs making a right were to be discovered, this approach would need to be supplemented.
 
-The generation for quantifier consists of two parts: positive samples that are repeated by an amount outside of the range (lines \ref{code:negativeRepPosStart}--\ref{code:negativeRepPosEnd}) and negative samples that are repeated within the bounds (lines \ref{code:negativeRepNegStart}--\ref{code:negativeRepNegEnd}).
+Negative samples for quantifiers can either be positive samples that are repeated by an amount outside of the range or negative samples that are repeated within the bounds (lines \ref{code:negativeQuantStart}--\ref{code:negativeQuantEnd}). The \code{repeat} function represents the approach of creating a sequence of character classes containing the samples of the child (Listing \ref{code:verificationPositive}, lines \ref{code:positiveRepeatFuncStart}--\ref{code:positiveRepeatEnd})
 
 Negative samples for backreferences can be generated by any derangement (permutation without trivial cycles) of the positive samples of the corresponding group. Since most derangement algorithms are far from trivial, only a random rotation (shift of all list elements) is used.
 
 Together these two algorithms can create a complete test suite from a given set of DSL examples which can be used to verify the compilation results indenpendently of the regex dialect.
 
 \begin{pseudoCode}[title={Generating Negative Test Samples},breakable=true,label=code:verificationNegative]
-function negativeSamples(node):
+function samples-(node, ast):
   switch node.type:
     case Character: %\label{code:negativeCharStart}%
       while c = node.value:
@@ -337,11 +358,11 @@ function negativeSamples(node):
         add(invertedRanges, [lower, range.lower - 1])
         lower $\gets$ range.upper + 1
       add(invertedRanges, [lower, $\textsc{encoding.last\_char}$])
-      return positiveSamples(invertedRanges) %\label{code:negativeClassEnd}%
+      return samples+(invertedRanges) %\label{code:negativeClassEnd}%
     case Alternative: %\label{code:negativeAltStart}%
       samples $\gets$ $\varnothing$
       for alternative $\in$ node.children:
-        candidates $\gets$ negativeSamples(alternative)
+        candidates $\gets$ samples-(alternative)
         for candidate $\in$ candidates:
           if $\nexists$ c $\in$ node.children : matches(c, candidate):
             samples $\gets$ samples $\cup$ candidate
@@ -351,33 +372,34 @@ function negativeSamples(node):
       for $i \gets 0$ to length(node.children):
         prefix, element, suffix $\gets$ splitAt(node.children, i)
         samples $\gets$ samples $\cup$ combine(
-                              positiveSamples(prefix), 
-                              negativeSamples(element), 
-                              positiveSamples(suffix))
+                              samples+(prefix), 
+                              samples-(element), 
+                              samples+(suffix))
       return concat(samples)
-    case Quantifier:
+    case Quantifier: %\label{code:negativeQuantStart}%
       samples $\gets$ $\varnothing$ 
-      for sample $\in$ positiveSamples(node.child): %\label{code:negativeRepPosStart}%
-        if node.lower $\neq$ 0:
-          samples $\gets$ samples $\cup$ repeat(sample, node.lower - 1) 
-        if node.upper $\neq \infty$:
-          samples $\gets$ samples $\cup$ repeat(sample, node.upper + 1) %\label{code:negativeRepPosEnd}%
-      for sample $\in$ negativeSamples(node.child): %\label{code:negativeRepNegStart}%
-        if node.lower $\neq$ 0:
-          samples $\gets$ samples $\cup$ repeat(sample, node.lower)
-        if node.upper $\neq$ $\infty$:
-          samples $\gets$ samples $\cup$ repeat(sample, node.upper)
-        else:
-          upper $\gets$ randomInt(node.lower, node.lower + 5)
-          samples $\gets$ samples $\cup$ repeat(sample, upper) %\label{code:negativeRepNegEnd}%
+      child $\gets$ node.child
+      if node.lower $\neq$ 0:
+        samples $\gets$ samples 
+                $\cup$ repeat(samples+(child, ast), node.lower - 1) 
+                $\cup$ repeat(samples-(child, ast), node.lower)
+      if node.upper $\neq \infty$:
+        samples $\gets$ samples 
+                $\cup$ repeat(samples+(child, ast), node.upper + 1)
+                $\cup$ repeat(samples-(child, ast), node.upper)
+      else:
+        upper $\gets$ randomInt(node.lower, node.lower + 5)
+        samples $\gets$ samples 
+                    $\cup$ repeat(samples-(child, ast), upper) %\label{code:negativeQuantEnd}%
+      return samples
     case Group:
-      return negativeSamples(node.child)
+      return samples-(node.child)
     case Backreference:  %\label{code:negativeBackrefStart}%
-      group $\gets$ node $\in$ getNodes(root) :
+      group $\gets$ node $\in$ getNodes(ast) :
                         $\land$ node.type = Group 
                         $\land$ node.name = node.name
-      shiftBy $\gets$ randomInt(1,length(group.positiveSamples))
-      return rotate(group.positiveSamples, shiftBy) %\label{code:negativeBackrefEnd}%
+      shiftBy $\gets$ randomInt(1,length(group.samples+))
+      return rotate(group.samples+, shiftBy) %\label{code:negativeBackrefEnd}%
 \end{pseudoCode}
 
 
@@ -395,7 +417,6 @@ Listing \ref{code:inferenceOfRexRegex} shows an example of RexRegex code alongsi
     \item populationSize = 500
     \item termination = 20
 \end{itemize}
-
 
 \FloatBarrier
 
