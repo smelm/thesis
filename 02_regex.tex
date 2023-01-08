@@ -26,11 +26,11 @@ In automata theory regular expressions are simply a notational tool that simplif
     \item $R_1^* = \{ \epsilon,\ R_1,\ R_1 \circ R_1,\ R_1 \circ R_1 \circ R_1,\  ... \}$, the Kleene star operator.\label{defRegexKleene}
 \end{enumerate}
 
-Following this definition, the language that accepts any word containing the letter \emph{a} two times can be constructed as shown in figure \ref{fix:regularExpressionMatching2As}.
+Following this definition, the language that accepts any word containing the letter \emph{a} two times can be constructed as:
 
-\begin{listingBox}[title={Regular expression that matches any word with two \emph{a}s}, label=fix:regularExpressionMatching2As,width=14cm,center]
-    \hspace{-5mm}$\Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*$
-\end{listingBox}
+\begin{equation*}
+    \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*\circ\{a\} \circ \Bigl ( \{b\} \cup ... \cup \{z\} \Bigr )^*
+\end{equation*}
 
 Regular expressions do not express a different concept than finite state machines but rather allow for the same idea to be expressed in a more compact manner. This is similar to their counterparts in programming.
 
@@ -92,18 +92,18 @@ For the two most common cases there are shorthand notations. The plus sign \patt
 All quantifiers are \emph{greedy} by default which means that the engine will first try to match the most characters possible with them. The regex \pattern{\bs w+\_\_} applied to \inp{abc\_\_} will first try to match the entire input with \pattern{\bs w+} since it is greedy and the word class also matches the underscores. While doing so the regex engine keeps track of so called \emph{saved states} which are all the positions in which a different decision could be made. Once it reaches the end of the input and the match fails because it still needs to match the two underscores it moves back to the last saved state. In this state it matched everything but the last character with \pattern{\bs w+} and can only match one underscore from there. It then returns to the next save state in which both underscores are still unmatched and the rest of the pattern matches successfully. This process is called \emph{backtracking}. 
 
 
-There are situations where greedy quantifiers match too much. If the user wanted to match something in quotes, they may try the pattern \pattern{".*"} which works for simple cases but runs into problems with some inputs (Listing \ref{fig:regexSurroundingTooGreedy}). As indicated, the regex engine matches the entire input which is not the intended outcome. This happens because the regex engine matches the entire input with \pattern{.*} first and then backtracks one step to match the quote.
+There are situations where greedy quantifiers match too much. If the user wanted to match something in quotes, they may try the pattern \pattern{".*"} which works for simple cases but runs into problems with some inputs (\figureref{fig:regexSurroundingTooGreedy}). As indicated, the regex engine matches the entire input which is not the intended outcome. This happens because the regex engine matches the entire input with \pattern{.*} first and then backtracks one step to match the quote.
 
-\begin{listingBox}[title={Too greedy quantifier \pattern{".*"}},label=fig:regexSurroundingTooGreedy,width=12cm,center]
+\begin{listingBoxFigure}[title={Too greedy quantifier in \pattern{".*"}},label=fig:regexSurroundingTooGreedy,width=12cm,center]
     \hspace{-5mm}\matched{"I~love~cake,"~Robert~said,~"nearly~as~much~as~I~love~steak."}
-\end{listingBox}
+\end{listingBoxFigure}
 
-There are a few different possibilities to avoid this. One would be to replace \pattern{.} with \pattern{[\caret "]} which matches anything but quotes. When this is not feasible -- which may be the case in more complex patterns -- a lazy quantifier \pattern{".*?"} can be used (Listing \ref{fig:regexSurroundingCorrectLazy}). 
+There are a few different possibilities to avoid this. One would be to replace \pattern{.} with \pattern{[\caret "]} which matches anything but quotes. When this is not feasible -- which may be the case in more complex patterns -- a lazy quantifier \pattern{".*?"} can be used (\figureref{fig:regexSurroundingCorrectLazy}). 
 
 
-\begin{listingBox}[title={Correct use of lazy quantifier \pattern{".*?"}},label=fig:regexSurroundingCorrectLazy,width=12cm,center]
+\begin{listingBoxFigure}[title={Correct use of lazy quantifier in \pattern{".*?"}},label=fig:regexSurroundingCorrectLazy,width=12cm,center]
     \hspace{-5mm}\matched{"I~love~cake,"}~Robert~said,~"nearly~as~much~as~I~love~steak."
-\end{listingBox}
+\end{listingBoxFigure}
 
 Lazy quantifiers are identical to their greedy counterparts, but they try to match as few characters as possible. After every matched character\footnote{Or after matching no character in the case of \pattern{??}, \pattern{*?} or \pattern{\{0,n\}?}.} a saved state is created and the engine moves on to the next subpattern. Only when the match fails, the engine returns to the saved state and matches one more character. Any greedy quantifier has a lazy counterpart marked by appending a question mark, which are \pattern{??}, \pattern{*?}, \pattern{+?}, \pattern{\{n\}?} and \pattern{\{n,m\}?}.
 
@@ -161,40 +161,35 @@ This does not mean that there is no use for positive look-arounds. The special p
 
 \subsubsection{Backreferences}
 
-Sometimes, the input contains interdependencies. This can be observed when there are different options for the same delimiter like double and single quotes. When the pattern \pattern{("|').*?("|')} is applied to an input with nested quotes, it matches them incorrectly (Listing \ref{fig:regexNestedQuotes}).
+Sometimes, the input contains interdependencies. This can be observed when there are different options for the same delimiter like double and single quotes. When the pattern \pattern{("|').*?("|')} is applied to an input with nested quotes, it matches them incorrectly (\figureref{fig:regexNestedQuotes}).
 
-\begin{listingBox}[title={Nested Quotes matched incorrectly by \pattern{("|').*?("|')}},label=fig:regexNestedQuotes,width=14cm,center]
+\begin{listingBoxFigure}[title={Nested quotes matched incorrectly by \pattern{("|').*?("|')}},label=fig:regexNestedQuotes,width=14cm,center]
     \matched{\textquotedbl{}He~said~\textquotesingle{}}good~day\matched{\textquotesingle{}~to~me,\textquotedbl{}}~Robert~said.
-\end{listingBox}
+\end{listingBoxFigure}
 
 
-In order to match this example correctly, the second quote must remember what the first matched quote was. For this, the contents of the $x$th capture groups can be accessed by using a backreference \pattern{\bs x} (see figure \ref{fig:regexNestedQuotesBackref}). It is also possible to refer back to named capture groups with \pattern{(?<quote>"|').*\bs k<quote>}.
+In order to match this example correctly, the second quote must remember what the first matched quote was. For this, the contents of the $x$th capture groups can be accessed by using a backreference \pattern{\bs x} (\figureref{fig:regexNestedQuotesBackref}). It is also possible to refer back to named capture groups with \pattern{(?<quote>"|').*\bs k<quote>}.
 
-\begin{listingBox}[title={Nested Quotes matched correctly by \pattern{("|').*?\bs 1}},label=fig:regexNestedQuotesBackref,width=14cm,center]
+\begin{listingBoxFigure}[title={Nested quotes matched correctly by \pattern{("|').*?\bs 1}},label=fig:regexNestedQuotesBackref,width=14cm,center]
     \matched{\textquotedbl{}He~said~{\textquotesingle{}good~day\textquotesingle{}}~to~me\textquotedbl,}~Robert~said.
-\end{listingBox}
+\end{listingBoxFigure}
 
 In an ironic collision of definitions it is this feature that makes regular expressions not regular. Backreferences give regex an internal memory with infinite states, which allows them to accept non-regular languages like \inp{a$^n$ba$^n$}. This is why modern regular expressions are context-free \cite{regexIsContextFree}.
 
 \subsubsection{Atomic Groups and Possessive Quantifiers}
 
-Backtracking is one of the most important principle in regular expressions but there are cases where it is not desirable. Figure \ref{fig:regexNonPossessive} shows a pattern that is supposed to match all units that are not measured in feet but finds an incorrect match because the measurement is more than one digit long. At first the \inp{36} is matched by \pattern{\bs d+} as expected but when the negative look-ahead fails, the engine backtracks and only matches \inp{3} after which the rest of the pattern matches as well.
+Backtracking is one of the most important principle in regular expressions but there are cases where it is not desirable. The pattern (\textbf{\figureref{fig:regexNonPossessive}}) is supposed to match all units that are not measured in feet but finds an incorrect match because the measurement is more than one digit long. At first the \inp{36} is matched by \pattern{\bs d+} as expected but when the negative look-ahead fails, the engine backtracks and only matches \inp{3} after which the rest of the pattern matches as well.
 
-\begin{listingBox}[title={Backtracking leads to incorrect Match with \pattern{\bs d+(?!ft)}},label=fig:regexNonPossessive,width=14cm,center]
+\begin{listingBoxFigure}[title={Backtracking leads to incorrect Match with \pattern{\bs d+(?!ft)}},label=fig:regexNonPossessive,width=14cm,center]
     \matched{3}6ft is about 12m
-\end{listingBox}
+\end{listingBoxFigure}
 
-This problem can be solved by using atomic groups which prevent the regex engine from backtracking. They are defined by surrounding the subpattern with \pattern{(?\textbf{>}\placeholder)} and behave like non-capturing groups with the additional property that the engine does not create saved states within them and can therefore not backtrack inside them. Once the engine has matched them, it cannot return and change it. Figure \ref{fig:regexPossessive} shows the corrected example.
+This problem can be solved by using atomic groups which prevent the regex engine from backtracking. They are defined by surrounding the subpattern with \pattern{(?\textbf{>}\placeholder)} and behave like non-capturing groups with the additional property that the engine does not create saved states within them and can therefore not backtrack inside them. Once the engine has matched them, it cannot return and change it (\figureref{fig:regexPossessive}).
 
-\begin{listingBox}[title={Atomic Groups \pattern{(?>\bs d+)(?!ft)} prevent Backtracking},label=fig:regexPossessive,width=14cm,center]
+\begin{listingBoxFigure}[title={Atomic Groups \pattern{(?>\bs d+)(?!ft)} prevent Backtracking},label=fig:regexPossessive,width=14cm,center]
     36ft is about \matched{12}m
-\end{listingBox}
+\end{listingBoxFigure}
 
-Since atomic groups are very commonly combined with quantifiers, there are special so-called possessive quantifiers that are automatically wrapped in atomic groups. They are marked by appending a plus sign to the normal quantifiers. The regex in figure \ref{fig:regexPossessive} could be written as \pattern{\bs d++(?!ft)} as well. Atomic groups and possessive quantifiers are only supported in a few regex dialects but in most cases their behavior can be mimicked by using negative look-aheads. In the example, the digit class can simply be included in the look-ahead \pattern{\bs d(?!\bs d|ft)}.
+Since atomic groups are very commonly combined with quantifiers, there are special so-called possessive quantifiers that are automatically wrapped in atomic groups. They are marked by appending a plus sign to the normal quantifiers. The corrected regex (\figureref{fig:regexPossessive}) could also be written as \pattern{\bs d++(?!ft)} as well. Atomic groups and possessive quantifiers are only supported in a few regex dialects but in most cases their behavior can be mimicked by using negative look-aheads. In the example, the digit class can simply be included in the look-ahead \pattern{\bs d(?!\bs d|ft)}.
 
-While they do not seem important for this example, possessive quantifiers are very important in addressing a certain class of performance problems (see section \ref{sec:redos}).
-
-% \subsubsection{Word boundaries}
-
-% We already discussed the start and end of line anchors \pattern{\caret} and \pattern{\$}. One property of them that was not mentioned is that they do not have a length. Just like look-aheads they do not consume input characters. The start of the input is not a character or thing that can be seen. It is an abstract concept that is invisible. The same applies to word boundaries which are invisible non-characters between word characters \pattern{\bs w} and non-word characters \pattern{\bs W}. They can for example be used to find all \inp{a} at the beginning of a word \pattern{\bs ba} which is more convenient than \pattern{[\caret A-Za-z]a}
-
+While they do not seem important for this example, possessive quantifiers are very important in addressing a certain class of performance problems (Section \ref{sec:redos}).

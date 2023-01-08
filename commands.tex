@@ -171,9 +171,6 @@
             basicstyle=\small\ttfamily,
             morekeywords={function,mod,switch,return,case,for,to,if,else,end,until}, 
             keywordstyle=\color{black}\bfseries,
-            %identifierstyle={\color{orange!90!black}},
-            %emph={any,define,either,many,same,begin,maybe,end},
-            %emphstyle={\color{blue!80!black}},
             morestring={[b]"},
             stringstyle=\color{red},
             escapechar={\%}
@@ -181,6 +178,15 @@
     }
 
     \newtcolorbox[blend into=listings]{listingBox}[1][]{% 
+        lstBox,
+        #1,
+        colback=cyan!20!white,
+        listing options = { 
+        style=shared,
+        mathescape=true },
+    }
+
+    \newtcolorbox[blend into=figures]{listingBoxFigure}[1][]{% 
         lstBox,
         #1,
         colback=cyan!20!white,
@@ -201,3 +207,7 @@
 
 \newcommand*{\utgast}{\textsc{utgast}}
 
+
+\newcommand*{\listingref}[1]{\textbf{Listing~\ref{#1}}}
+\newcommand*{\tableref}[1]{\textbf{Table~\ref{#1}}}
+\newcommand*{\figureref}[1]{\textbf{Figure~\ref{#1}}}

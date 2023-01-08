@@ -9,7 +9,7 @@ The first step in design should always be to ask \emph{who} the product is desig
 
 \subsection{Developers}
 
-The first group are developers who most likely already use regex on a regular basis and are therefore aware of its flaws \cite{RegexNotLinguaFranca}\cite{RegexesAreHard}. In recent years more focus has been put on clean code and developers prefer simple and understandable solutions over clever ones. The recent development of multiple DSLs for regular expressions (see section \ref{sec:relatedWork}) indicates that the same mindset is also applied to regular expressions.
+The first group are developers who most likely already use regex on a regular basis and are therefore aware of its flaws \cite{RegexNotLinguaFranca}\cite{RegexesAreHard}. In recent years more focus has been put on clean code and developers prefer simple and understandable solutions over clever ones. The recent development of multiple DSLs for regular expressions (Section \ref{sec:relatedWork}) indicates that the same mindset is also applied to regular expressions.
 
 While developers are the users to benefit the most from a regex DSL, they will also be the most critical. In order to appeal to this demographic the language should at least meet the following criteria:
 
@@ -43,7 +43,7 @@ The two group are in many aspects polar opposites of each other. Sections \ref{s
 
 To adequately address the issues of regex, it is not only important to understand how they work but also how they are used. This section will analyse the usage of regular expressions in real-world code bases. It is based on the regex polyglot corpus \cite{RegexNotLinguaFranca} which contains 537,806 patterns from 193,524 open source projects.
 
-The analysis was carried out by applying regular expressions to the regex patterns in the dataset and manually verifying the results. Special care went into covering the different dialects present in the dataset. Tables \ref{tab:basicRegexFeatureUsage} and \ref{tab:advancedRegexFeatureUsage} show the findings of the analysis. At a first look the figures align well with the expectations experienced programmers would have for the popularity of regex features. 
+The analysis was carried out by applying regular expressions to the regex patterns in the dataset and manually verifying the results. Special care went into covering the different dialects present in the dataset. \textbf{Tables \ref{tab:basicRegexFeatureUsage}} and \textbf{\ref{tab:advancedRegexFeatureUsage}} show the findings of the analysis. At a first look the figures align well with the expectations experienced programmers would have for the popularity of regex features. 
 
 The start of input or line anchor \pattern{\caret} is one of the most commonly used features, occurring three times more often than its counterpart \pattern{\dollar}. Additionally, it can be noted that the dollar sign is mainly used to match the entire string \pattern{\caret\placeholder\dollar}.
 
@@ -98,7 +98,7 @@ The more advanced features of regular expressions like look-arounds and unicode 
 
 This section will try to condense all the previously discussed user requirements and shortcomings of regular expressions into design principles that will form the throughline of the DSL.
 
-Instead of starting from scratch, these will be losely based on the Zen of Python (Listing \ref{fig:zenOfPython}) -- a secret design credo that is displayed when entering the command \code{import this} inside the Python shell \cite{ZenOfPython}.
+Instead of starting from scratch, these will be losely based on the Zen of Python~(\listingref{fig:zenOfPython}) -- a secret design credo that is displayed when entering the command \code{import this} inside the Python shell \cite{ZenOfPython}.
 
 \begin{listingBox}[float=t!,title={The Zen of Python, by Tim Peters}, label=fig:zenOfPython]
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
@@ -130,7 +130,7 @@ When looking at the different requirements of programmers and non-programmers, i
 
 \subsection{Verbose but Readable}
 
-The first seven lines of the Zen of Python (Listing \ref{fig:zenOfPython}) emphasize that the language should be simple, readible and avoid density. The main goal of the domain specific language is to present the same concepts as regular expressions in a more explicit manner. This entails using keywords or function names instead of single characters. The non-programmer facing DSL will imitate the English syntax and air on the side of being too verbose. This will also be a useful exploration of the design space and may facilitate discussions on how much verbosity is too much.
+The first seven lines of the Zen of Python (\listingref{fig:zenOfPython}) emphasize that the language should be simple, readible and avoid density. The main goal of the domain specific language is to present the same concepts as regular expressions in a more explicit manner. This entails using keywords or function names instead of single characters. The non-programmer facing DSL will imitate the English syntax and air on the side of being too verbose. This will also be a useful exploration of the design space and may facilitate discussions on how much verbosity is too much.
 
 \subsection{Explicit over Implicit} \label{sec:explicitOverImplicit}
 
@@ -146,7 +146,7 @@ While it is not the goal of this work to remove expressive power from regex, it 
 
 \subsection{Consistency}
 
-Research shows that the differences between regex dialects is a serious problem for developers \cite{RegexNotLinguaFranca} and one of the best arguments for a regex DSL. While numerous projects try to solve the other mentioned problems (see section \ref{sec:relatedWork}), this issue has been widely unaddressed.
+Research shows that the differences between regex dialects is a serious problem for developers \cite{RegexNotLinguaFranca} and one of the best arguments for a regex DSL. While numerous projects (Section \ref{sec:relatedWork}) try to solve the other mentioned problems, this issue has been widely unaddressed.
 Most projects are rooted in a specific ecosystem and only focus on simplifying string processing in that specific programming language. While this is an improvement in the other areas, it merely lifts the compatibility problems of regex to a higher level of abstraction.
 
 The only way to completely remove inconsistencies between regex dialects and DSLs is to provide a single high level DSL that is consistent across all languages. This could either take the form of a shared standard or -- preferably -- a single implementation that compiles to multiple dialects. Such a language-agnostic DSL needs to be tested for each target language which presents a significant challenge. 
