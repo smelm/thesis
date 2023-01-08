@@ -192,7 +192,7 @@ this allows the user to load their own or third party functions into the DSL. Re
 
 \listingref{code:emailPattern} showcases a full example of the RexRegex DSL. Matching email addresses is a notoriously difficult task and the regex that achieves it (\listingref{code:emailRegex}) is challenging to read \cite{EmailRegex}. While verbose, the DSL code is a lot easier to read and understand.
 
-\begin{rexregexBox}[float=htbp,title={RexRegex code for validating email addresses},breakable,label=code:emailPattern,width=12cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily}]
+\begin{rexregexBox}[float=htbp,title={RexRegex code for validating email addresses},breakable,label=code:emailPattern,width=12cm,center,listing options={style=rexregex,basicstyle=\small\ttfamily, mathescape=true}]
 define ipAddress as
     begin separatedBy(".")
         1 to 3 of DIGIT
@@ -202,7 +202,7 @@ end
 define legalChar as
     any except of
         "<", ">", "(", ")", "[", "]"
-        "\\", ".", ",", ";", ":", "@"
+        ".", ",", ";", ":", "@", "${\textcolor{Firebrick3!90!white}{\text{\textbackslash}}}$"
         QUOTE.DOUBLE, SPACE
     end
 end
