@@ -1,88 +1,88 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="24.8.8">
   <diagram name="Seite-1" id="PIdwhDuCiP5LDbIeZKLE">
-    <mxGraphModel dx="2110" dy="809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2937" dy="809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="MklEleXEeYvls_ki88SR-47" value="Document Title" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-47" value="Document Title" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="360" y="320" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-48" value="Summary of Full Document" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-48" value="Summary of Full Document" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="360" y="400" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-49" value="Level:&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;0&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-49" value="Level:&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;0&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="360" y="360" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-50" value="1. Heading" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-50" value="1. Heading" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="200" y="440" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-51" value="Summary of Section 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-51" value="Summary of Section 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="200" y="520" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-52" value="Level: 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-52" value="Level: 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="200" y="480" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-53" value="2. Heading" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-53" value="2. Heading" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="520" y="440" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-54" value="Summary of Section 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-54" value="Summary of Section 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="520" y="520" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-55" value="Level: 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-55" value="Level: 1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="520" y="480" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-56" value="1.1. Sub-Heading" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-56" value="1.1. Sub-Heading" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="80" y="560" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-57" value="Summary of Sub-Section 1.1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-57" value="Summary of Sub-Section 1.1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="80" y="640" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-58" value="Level: 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-58" value="Level: 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="80" y="600" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-59" value="1.2. Sub-Heading" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-59" value="1.2. Sub-Heading" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="560" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="MklEleXEeYvls_ki88SR-87" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="MklEleXEeYvls_ki88SR-60" target="MklEleXEeYvls_ki88SR-75">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-60" value="Summary of Sub-Section 1.2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-60" value="Summary of Sub-Section 1.2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="640" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-61" value="Level: 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-61" value="Level: 2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="600" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-62" value="Paragraph 4" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-62" value="Paragraph 4" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="440" y="720" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-63" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-63" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="440" y="800" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-66" value="Paragraph 5" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-66" value="Paragraph 5" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="600" y="720" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-67" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-67" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="600" y="800" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-69" value="Paragraph 1" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-69" value="Paragraph 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry y="720" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-70" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-70" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry y="800" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-71" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-71" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry y="760" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-72" value="Paragraph 2" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-72" value="Paragraph 2" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="160" y="720" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-73" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-73" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="160" y="800" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-75" value="Paragraph 3" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-75" value="Paragraph 3" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="720" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-76" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-76" value="Paragraph Contents" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="800" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="MklEleXEeYvls_ki88SR-79" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="MklEleXEeYvls_ki88SR-49" target="MklEleXEeYvls_ki88SR-50">
@@ -157,16 +157,16 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-90" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-90" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="160" y="760" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-91" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-91" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="320" y="760" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-92" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-92" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="440" y="760" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MklEleXEeYvls_ki88SR-93" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="MklEleXEeYvls_ki88SR-93" value="Level: 100" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="600" y="760" width="80" height="40" as="geometry" />
         </mxCell>
       </root>
